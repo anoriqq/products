@@ -1,2 +1,4 @@
 .envrc
+scripts/bin/*
+!scripts/bin/an
 **/node_modules
