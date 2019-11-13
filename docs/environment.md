@@ -75,5 +75,5 @@
 - [ ] `direnv`をインストールする
   ```sh
   cd ~/workspaces/product
-  sudo chmod +x ./scripts/add-bin-to-path.sh && ./scripts/add-bin-to-path.sh
+  sudo chmod +x ./scripts/install-direnv.sh && ./scripts/install-direnv.sh
   ```
