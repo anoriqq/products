@@ -10,4 +10,4 @@
 - それなりに強いマシンがあるとストレス感じないので良い
 
 ### 環境構築
-- [environment.md](https://github.com/anoriqq/product/blob/master/doc/Environment.md)
+- [environment.md](https://github.com/anoriqq/product/blob/master/docs/environment.md)
