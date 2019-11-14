@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  nginx:
+    image: nginx:1.17.5-alpine
+    expose:
+      - '80'
+      - '443'
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - type: bind
+        source: ./packages/nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
+      - type: bind
+        source: ./packages/nginx/conf.d
+        target: /etc/nginx/conf.d
+      - type: bind
+        source: ./packages/nginx/certs
+        target: /etc/nginx/certs
+    networks:
+      app_net:
+        aliases:
+          - product.anoriqq.local
+
+  index:
+    build:
+      context: ./packages/index
+    expose:
+      - '8000'
+    init: true
+    domainname: index
+    hostname: index
+    ports:
+      - '8000:8000' # For debugging
+    networks:
+      app_net:
+        aliases:
+          - product.anoriqq.local
+          - index
+
+networks:
+  app_net:
