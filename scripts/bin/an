@@ -7,6 +7,8 @@ source ${FUNCTION_FILE}
 
 log "Run" "$1 ${*:2}"
 
+cd ${WORKSPACE_ROOT}
+
 if grep -e "^function _${1}.*{$" $FUNCTION_FILE &> /dev/null
 then
   COMMAND=${1:-help}
