@@ -7,7 +7,7 @@ source ${SCRIPTS_DIR}/functions.sh
 
 TASK_NAME='Installation of direnv'
 
-log "[Start]: ${TASK_NAME}"
+log "Start" "${TASK_NAME}"
 
 # Download of direnv binary to binary directory
 BIN_DIR=${SCRIPTS_DIR}/bin
@@ -17,9 +17,9 @@ if [ ! -e "${DIRENV_BIN_PATH}" ]; then
   DIRENV_BIN_RELEASE=https://github.com/direnv/direnv/releases/download/v$DIRENV_VERSION/direnv.linux-amd64
   curl -L ${DIRENV_BIN_RELEASE} -o ${DIRENV_BIN_PATH}
   if [ $? -ne 0 ]; then exit 1; fi
-  log "[Finish]: Download of direnv binary"
+  log "Finish" "Download of direnv binary"
 else
-  log "[Skip]: Direnv binary already exists"
+  log "Skip" "Direnv binary already exists"
 fi
 chmod +x -R ${BIN_DIR}
 if [ $? -ne 0 ]; then exit 1; fi
@@ -28,27 +28,29 @@ if [ $? -ne 0 ]; then exit 1; fi
 # @see https://github.com/direnv/direnv/blob/master/docs/hook.md
 ZSHRC_PATH=~/.zshrc
 if [ -e "${ZSHRC_PATH}" ]; then
-  if grep -q 'eval $(direnv hook zsh)' ${ZSHRC_PATH}; then
-    log "[Skip]: Zsh already has a Direnv hook"
+  DRIENV_HOOK_ZSH='eval "$(direnv hook zsh)"'
+  if grep -q "${DRIENV_HOOK_ZSH}" ${ZSHRC_PATH}; then
+    log "Skip" "Zsh already has a Direnv hook"
   else
-    echo -e '\n# direnv settings\neval $(direnv hook zsh)' >> ${ZSHRC_PATH}
+    echo -e "\n# direnv hook\n${DRIENV_HOOK_ZSH}" >> ${ZSHRC_PATH}
     if [ $? -ne 0 ]; then exit 1; fi
-    log "[Finish]: Add direnv hook to zsh"
+    log "Finish" "Add direnv hook to zsh"
   fi
 else
-  log "[Finish]: Add direnv hook to zsh"
+  log "Finish" "Add direnv hook to zsh"
 fi
 BASHRC_PATH=~/.bashrc
 if [ -e "${BASHRC_PATH}" ]; then
-  if grep -q 'eval $(direnv hook bash)' ${BASHRC_PATH}; then
-    log "[Skip]: Bash already has a Direnv hook"
+  DRIENV_HOOK_BASH='eval "$(direnv hook bash)"'
+  if grep -q "${DRIENV_HOOK_BASH}" ${BASHRC_PATH}; then
+    log "Skip" "Bash already has a Direnv hook"
   else
-    echo -e '\n# direnv settings\neval $(direnv hook bash)' >> ${BASHRC_PATH}
+    echo -e "\n# direnv hook\n${DRIENV_HOOK_BASH}" >> ${BASHRC_PATH}
     if [ $? -ne 0 ]; then exit 1; fi
-    log "[Finish]: Add direnv hook to bash"
+    log "Finish" "Add direnv hook to bash"
   fi
 else
-  log "[Finish]: Add direnv hook to bash"
+  log "Finish" "Add direnv hook to bash"
 fi
 
 # Add settings to .envrc file
@@ -61,4 +63,4 @@ if [ $? -ne 0 ]; then exit 1; fi
 direnv allow
 if [ $? -ne 0 ]; then exit 1; fi
 
-log "[Complete]: ${TASK_NAME}"
+log "Complete" "${TASK_NAME}"

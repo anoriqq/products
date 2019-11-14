@@ -5,14 +5,14 @@ source ${FUNCTION_FILE}
 
 
 
-log "[Run]: $1 ${*:2}"
+log "Run" "$1 ${*:2}"
 
 if grep -e "^function _${1}.*{$" $FUNCTION_FILE &> /dev/null
 then
   COMMAND=${1:-help}
 else
   COMMAND=help
-  log "[Error]: ${1}: command no found"
+  log "Error" "${1}: command no found"
 fi
 
-_${COMMAND} ${*:2} || (log "[Error]: ${COMMAND} command failed"; exit 1)
+_${COMMAND}_ ${*:2} || (log "Error" "${COMMAND} command failed"; exit 1)
