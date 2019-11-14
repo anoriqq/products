@@ -2,3 +2,5 @@
 scripts/bin/*
 !scripts/bin/an
 **/node_modules
+sandbox/bin
+packages/nginx/certs
