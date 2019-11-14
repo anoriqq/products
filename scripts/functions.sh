@@ -18,6 +18,67 @@ function _help_(){
     | awk -F ':' '{printf "       %-20s%s\n", $1, $2}'
 }
 
+# up #
+## すべてのコンテナを起動します ##
+function _up_(){
+  local TASK_NAME='Start-up all product system'
+  log "Start" "${TASK_NAME}"
+  up
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Complete" "${TASK_NAME}"
+}
+
+# down #
+## すべてのコンテナを停止します ##
+function _down_(){
+  local TASK_NAME='Stop all product system'
+  log "Start" "${TASK_NAME}"
+  down
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Complete" "${TASK_NAME}"
+}
+
+# restart #
+## すべてのシステムを再起動します ##
+function _restart_(){
+  local TASK_NAME='Stop all product system'
+  log "Start" "${TASK_NAME}"
+  down
+  up
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Complete" "${TASK_NAME}"
+}
+
+# logs #
+## コンテナのログを出力します ##
+function _logs_(){
+  local TASK_NAME='Display logs from containers'
+  log "Start" "${TASK_NAME}"
+  docker-compose logs -f
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Complete" "${TASK_NAME}"
+}
+
+# restartNginx #
+## nginxをリスタートします ##
+function _restartNginx_(){
+  local TASK_NAME='Restart nginx'
+  log "Start" "${TASK_NAME}"
+  docker exec -it product_nginx_1 nginx -s reload
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Complete" "${TASK_NAME}"
+}
+
+# ps #
+## dockerコンテナの一覧を表示します ##
+function _ps_(){
+  local TASK_NAME='Display docker container list'
+  log "Start" "${TASK_NAME}"
+  docker ps -a
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Complete" "${TASK_NAME}"
+}
+
 # direnv #
 ## direnvをセットアップします ##
 function _direnv_(){
@@ -135,8 +196,8 @@ function po(){
   done
 }
 
-# ローディングアニメーション
 function load(){
+  # ローディングアニメーション
   local COMMAND=${1}
   local ARGS=${*:2}
   if [ ! "${COMMAND}" ]; then exit 0; fi
@@ -144,4 +205,20 @@ function load(){
   local LOAD_PID=$!
   ${COMMAND} ${ARGS}
   kill -INT ${LOAD_PID};
+}
+
+function up(){
+  docker-compose up --build -d
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Finish" "docker-compose up"
+  docker ps -a
+  if [ $? -ne 0 ]; then exit 1; fi
+}
+
+function down(){
+  docker-compose down
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Finish" "docker-compose down"
+  docker ps -a
+  if [ $? -ne 0 ]; then exit 1; fi
 }
