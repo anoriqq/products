@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  nginx:
+    build:
+      context: ./packages/nginx
+    image: gcr.io/anoriqq-product/nginx
+    domainname: product.anoriqq.local
+    hostname: product.anoriqq.local
+    expose:
+      - '80'
+      - '443'
+    ports:
+      - '80:80'
+      - '443:443'
+    networks:
+      app_net:
+        aliases:
+          - product.anoriqq.local
+
+  index:
+    build:
+      context: ./packages/index
+    image: anoriqq/product-index:latest
+    init: true
+    domainname: index
+    hostname: index
+    expose:
+      - '8000'
+    ports:
+      - '8000:8000' # For debugging
+    networks:
+      app_net:
+        aliases:
+          - product.anoriqq.local
+          - index
+
+networks:
+  app_net:
