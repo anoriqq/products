@@ -11,3 +11,13 @@
 
 ### 環境構築
 - [environment.md](https://github.com/anoriqq/product/blob/master/docs/environment.md)
+
+## 開発方法
+- 全コンテナの起動
+  ```sh
+  an up
+  ```
+- 全コンテナの再起動
+  ```sh
+  an restart
+  ```
