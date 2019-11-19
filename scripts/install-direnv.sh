@@ -37,7 +37,7 @@ if [ -e "${ZSHRC_PATH}" ]; then
     log "Finish" "Add direnv hook to zsh"
   fi
 else
-  log "Finish" "Add direnv hook to zsh"
+  log "Skip" "Cannot found zshrc"
 fi
 BASHRC_PATH=~/.bashrc
 if [ -e "${BASHRC_PATH}" ]; then
@@ -50,17 +50,44 @@ if [ -e "${BASHRC_PATH}" ]; then
     log "Finish" "Add direnv hook to bash"
   fi
 else
-  log "Finish" "Add direnv hook to bash"
+  log "Skip" "Cannot found bashrc"
+fi
+
+# Create .envrc file
+ENVRC_PATH=./.envrc
+if [ ! -e "${ENVRC_PATH}" ]; then
+  touch ${ENVRC_PATH}
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Finish" "Create .envrc file"
 fi
 
 # Add settings to .envrc file
-ENVRC_PATH=./.envrc
-ENVRC_SETTINGS='export PATH=$PATH:./scripts/bin\nexport WORKSPACE_ROOT=/home/anoriqq/workspace/product'
-echo -e ${ENVRC_SETTINGS} >> ${ENVRC_PATH}
-if [ $? -ne 0 ]; then exit 1; fi
+ENVRC_SETTINGS_PATH='export PATH=$PATH:./scripts/bin'
+if grep -q "${ENVRC_SETTINGS_PATH}" ${ENVRC_PATH}; then
+  log "Skip" "Envrc already has a PATH"
+else
+  echo -e "${ENVRC_SETTINGS_PATH}" >> ${ENVRC_PATH}
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Finish" "Add PATH to envrc"
+fi
+ENVRC_SETTINGS_WORKSPACE_ROOT='export WORKSPACE_ROOT=/home/anoriqq/workspace/product'
+if grep -q "${ENVRC_SETTINGS_WORKSPACE_ROOT}" ${ENVRC_PATH}; then
+  log "Skip" "Envrc already has a WORKSPACE_ROOT"
+else
+  echo -e "${ENVRC_SETTINGS_WORKSPACE_ROOT}" >> ${ENVRC_PATH}
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Finish" "Add WORKSPACE_ROOT to envrc"
+fi
 
 # Activation direnv
-direnv allow
-if [ $? -ne 0 ]; then exit 1; fi
+if direnv status | grep -soq 'Found RC allowed true'; then
+  log "Skip" "Allready allowed direnv"
+else
+  direnv allow
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Finish" "allow direnv"
+fi
+
+
 
 log "Complete" "${TASK_NAME}"
