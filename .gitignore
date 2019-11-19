@@ -4,3 +4,4 @@ scripts/bin/*
 **/node_modules
 sandbox/bin
 packages/nginx/certs
+**/dist
