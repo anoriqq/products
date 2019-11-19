@@ -113,6 +113,17 @@ function _po_(){
   log "Complete" "${TASK_NAME}"
 }
 
+# 各パッケージでコマンドを実行する
+function _exec_(){
+  local TASK_NAME="Execute command in $1"
+  log "Start" "${TASK_NAME}"
+  cd "${WORKSPACE_ROOT}/packages/$1"
+  if [ $? -ne 0 ]; then exit 1; fi
+  ${*:2}
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Complete" "${TASK_NAME}"
+}
+
 # utils
 
 function log(){
