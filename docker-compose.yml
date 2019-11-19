@@ -3,6 +3,7 @@ version: '3.7'
 services:
   nginx:
     image: nginx:1.17.5-alpine
+    tty: true
     volumes:
       - type: bind
         source: ./packages/nginx/nginx.conf
@@ -22,7 +23,7 @@ services:
       - '80:80'
       - '443:443'
     networks:
-      app_net:
+      product_network:
         aliases:
           - anoriqq.local
           - product.anoriqq.local
@@ -31,12 +32,13 @@ services:
     build:
       context: ./packages/portfolio
     init: true
+    tty: true
     domainname: portfolio
     hostname: portfolio
     expose:
       - '8000'
     networks:
-      app_net:
+      product_network:
         aliases:
           - anoriqq.local
           - product.anoriqq.local
@@ -45,14 +47,17 @@ services:
     build:
       context: ./packages/delay-tweet
     init: true
+    tty: true
     domainname: delay-tweet
     hostname: delay-tweet
     expose:
       - '8000'
     networks:
-      app_net:
+      product_network:
         aliases:
           - delay-tweet.anoriqq.local
+    env_file: ./packages/delay-tweet/.env
+    command: yarn debug
 
 networks:
-  app_net:
+  product_network:
