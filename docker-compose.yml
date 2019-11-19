@@ -3,12 +3,6 @@ version: '3.7'
 services:
   nginx:
     image: nginx:1.17.5-alpine
-    expose:
-      - '80'
-      - '443'
-    ports:
-      - '80:80'
-      - '443:443'
     volumes:
       - type: bind
         source: ./packages/nginx/nginx.conf
@@ -19,26 +13,46 @@ services:
       - type: bind
         source: ./packages/nginx/certs
         target: /etc/nginx/certs
+    domainname: product.anoriqq.local
+    hostname: product.anoriqq.local
+    expose:
+      - '80'
+      - '443'
+    ports:
+      - '80:80'
+      - '443:443'
     networks:
       app_net:
         aliases:
+          - anoriqq.local
           - product.anoriqq.local
 
-  index:
+  portfolio:
     build:
-      context: ./packages/index
+      context: ./packages/portfolio
+    init: true
+    domainname: portfolio
+    hostname: portfolio
     expose:
       - '8000'
-    init: true
-    domainname: index
-    hostname: index
-    ports:
-      - '8000:8000' # For debugging
     networks:
       app_net:
         aliases:
+          - anoriqq.local
           - product.anoriqq.local
-          - index
+
+  delay-tweet:
+    build:
+      context: ./packages/delay-tweet
+    init: true
+    domainname: delay-tweet
+    hostname: delay-tweet
+    expose:
+      - '8000'
+    networks:
+      app_net:
+        aliases:
+          - delay-tweet.anoriqq.local
 
 networks:
   app_net:
