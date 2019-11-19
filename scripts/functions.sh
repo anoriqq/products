@@ -104,6 +104,29 @@ function _cleanDockerImage_(){
   log "Complete" "${TASK_NAME}"
 }
 
+# 不要なdockerコンテナを削除します
+function _cleanDockerContainer_(){
+  local TASK_NAME='Clean docker container'
+  log "Start" "${TASK_NAME}"
+  # docker container ls -aq | grep -e '.*'
+  # if [ $? -ne 0 ]; then exit 1; fi
+  if docker container ls -aq | grep -e '.*'; then
+    docker container stop `docker container ls -aq`
+    if [ $? -ne 0 ]; then exit 1; fi
+    log "Finish" "Stop container"
+  else
+    log "Skip" "Container is allready stop"
+  fi
+  if docker container ls -aq | grep -e '.*'; then
+    docker container rm `docker container ls -aq`
+    if [ $? -ne 0 ]; then exit 1; fi
+    log "Finish" "Remove container"
+  else
+    log "Skip" "Container is allready clean"
+  fi
+  log "Complete" "${TASK_NAME}"
+}
+
 # ローディングアニメーション
 function _po_(){
   local TASK_NAME='Loading animation'
