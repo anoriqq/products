@@ -50,7 +50,7 @@ function _restart_(){
 function _logs_(){
   local TASK_NAME='Display logs from containers'
   log "Start" "${TASK_NAME}"
-  docker-compose logs -f
+  docker-compose logs ${*:1}
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
 }
