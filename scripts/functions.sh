@@ -6,20 +6,19 @@ FUNCTION_FILE=${WORKSPACE_ROOT}/scripts/functions.sh
 
 # an command
 
-# help #
-## anコマンドの使い方の説明 ##
+# anコマンドの使い方の説明
 function _help_(){
   echo "   Usage: an COMMAND [ARG...]"
   echo "   COMMAND:"
-  grep -B 2 -e "^function _${1}.*{$" ${FUNCTION_FILE}\
-    | grep '^#'\
-    | sed -z 's/\n##\s/:/g'\
+  grep -B 1 -E -e '^function\s_.*' ${FUNCTION_FILE}\
+    | grep -E '(^#|^function)'\
+    | sed -z 's/\nfunction\s_/:/g'\
     | sed -r 's/(\s|#)//g'\
-    | awk -F ':' '{printf "       %-20s%s\n", $1, $2}'
+    | sed -rE 's/_\W+\{$//g'\
+    | awk -F ':' '{ printf "       %-20s%s\n", $2, $1 }'
 }
 
-# up #
-## すべてのコンテナを起動します ##
+# すべてのコンテナを起動します
 function _up_(){
   local TASK_NAME='Start-up all product system'
   log "Start" "${TASK_NAME}"
@@ -28,8 +27,7 @@ function _up_(){
   log "Complete" "${TASK_NAME}"
 }
 
-# down #
-## すべてのコンテナを停止します ##
+# すべてのコンテナを停止します
 function _down_(){
   local TASK_NAME='Stop all product system'
   log "Start" "${TASK_NAME}"
@@ -38,8 +36,7 @@ function _down_(){
   log "Complete" "${TASK_NAME}"
 }
 
-# restart #
-## すべてのシステムを再起動します ##
+# すべてのシステムを再起動します
 function _restart_(){
   local TASK_NAME='Stop all product system'
   log "Start" "${TASK_NAME}"
@@ -49,8 +46,7 @@ function _restart_(){
   log "Complete" "${TASK_NAME}"
 }
 
-# logs #
-## コンテナのログを出力します ##
+# コンテナのログを出力します
 function _logs_(){
   local TASK_NAME='Display logs from containers'
   log "Start" "${TASK_NAME}"
@@ -59,8 +55,7 @@ function _logs_(){
   log "Complete" "${TASK_NAME}"
 }
 
-# restartNginx #
-## nginxをリスタートします ##
+# nginxをリスタートします
 function _restartNginx_(){
   local TASK_NAME='Restart nginx'
   log "Start" "${TASK_NAME}"
@@ -69,8 +64,7 @@ function _restartNginx_(){
   log "Complete" "${TASK_NAME}"
 }
 
-# ps #
-## dockerコンテナの一覧を表示します ##
+# dockerコンテナの一覧を表示します
 function _ps_(){
   local TASK_NAME='Display docker container list'
   log "Start" "${TASK_NAME}"
@@ -79,14 +73,12 @@ function _ps_(){
   log "Complete" "${TASK_NAME}"
 }
 
-# direnv #
-## direnvをセットアップします ##
+# direnvをセットアップします
 function _direnv_(){
   ${WORKSPACE_ROOT}/scripts/install-direnv.sh
 }
 
-# mkcert #
-## nginxのためにmkcertでcertificationをセットアップします ##
+# nginxのためにmkcertでcertificationをセットアップします
 function _mkcert_(){
   local TASK_NAME='Create a certificate with mkcert'
   log "Start" "${TASK_NAME}"
@@ -104,8 +96,7 @@ function _mkcert_(){
   log "Complete" "${TASK_NAME}"
 }
 
-# cleanDockerImage #
-## 不要なdockerイメージを削除します ##
+# 不要なdockerイメージを削除します
 function _cleanDockerImage_(){
   local TASK_NAME='Clean dangling images'
   log "Start" "${TASK_NAME}"
@@ -113,8 +104,7 @@ function _cleanDockerImage_(){
   log "Complete" "${TASK_NAME}"
 }
 
-# po #
-## ローディングアニメーション ##
+# ローディングアニメーション
 function _po_(){
   local TASK_NAME='Loading animation'
   log "Start" "${TASK_NAME}"
