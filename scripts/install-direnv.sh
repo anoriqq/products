@@ -62,21 +62,13 @@ if [ ! -e "${ENVRC_PATH}" ]; then
 fi
 
 # Add settings to .envrc file
-ENVRC_SETTINGS_PATH='export PATH=$PATH:./scripts/bin'
+ENVRC_SETTINGS_PATH='dotenv'
 if grep -q "${ENVRC_SETTINGS_PATH}" ${ENVRC_PATH}; then
-  log "Skip" "Envrc already has a PATH"
+  log "Skip" "Envrc already has dotenv setting"
 else
   echo -e "${ENVRC_SETTINGS_PATH}" >> ${ENVRC_PATH}
   if [ $? -ne 0 ]; then exit 1; fi
-  log "Finish" "Add PATH to envrc"
-fi
-ENVRC_SETTINGS_WORKSPACE_ROOT='export WORKSPACE_ROOT=/home/anoriqq/workspace/product'
-if grep -q "${ENVRC_SETTINGS_WORKSPACE_ROOT}" ${ENVRC_PATH}; then
-  log "Skip" "Envrc already has a WORKSPACE_ROOT"
-else
-  echo -e "${ENVRC_SETTINGS_WORKSPACE_ROOT}" >> ${ENVRC_PATH}
-  if [ $? -ne 0 ]; then exit 1; fi
-  log "Finish" "Add WORKSPACE_ROOT to envrc"
+  log "Finish" "Add dotenv setting to envrc"
 fi
 
 # Activation direnv

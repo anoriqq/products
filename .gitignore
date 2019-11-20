@@ -1,7 +1,7 @@
-.envrc
+.env
 scripts/bin/*
 !scripts/bin/an
-**/node_modules
+node_modules
 sandbox/bin
 packages/nginx/certs
-**/dist
+dist
