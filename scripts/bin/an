@@ -1,7 +1,9 @@
 #!/bin/bash
 
-FUNCTION_FILE=${WORKSPACE_ROOT}/scripts/functions.sh
-source ${FUNCTION_FILE}
+FUNCTION_PATH=${WORKSPACE_ROOT}/scripts/functions.sh
+UTILS_PATH=${WORKSPACE_ROOT}/scripts/utils.sh
+source ${FUNCTION_PATH}
+source ${UTILS_PATH}
 
 
 
@@ -9,7 +11,7 @@ log "Run" "$1 ${*:2}"
 
 cd ${WORKSPACE_ROOT}
 
-if grep -e "^function _${1}.*{$" $FUNCTION_FILE &> /dev/null
+if grep -e "^function _${1}.*{$" $FUNCTION_PATH &> /dev/null
 then
   COMMAND=${1:-help}
 else
