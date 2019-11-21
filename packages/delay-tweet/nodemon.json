@@ -1,0 +1,19 @@
+{
+  "watch": [
+    "src"
+  ],
+  "ignore": [
+    ".git",
+    "node_modules",
+    "build",
+    ".vscode"
+  ],
+  "env": {
+    "NODE_ENV": "development",
+    "DEBUG": "express:application,request,app:*",
+    "PORT": "8000"
+  },
+  "exec": "ts-node ./src/index.ts",
+  "ext": "js,json,ts",
+  "verbose": true
+}
