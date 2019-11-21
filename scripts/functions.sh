@@ -104,7 +104,7 @@ function _cleanDockerImage_(){
   log "Complete" "${TASK_NAME}"
 }
 
-# 不要なdockerコンテナを削除します
+# すべてのdockerコンテナを削除します
 function _cleanDockerContainer_(){
   local TASK_NAME='Clean docker container'
   log "Start" "${TASK_NAME}"
@@ -143,6 +143,17 @@ function _exec_(){
   cd "${WORKSPACE_ROOT}/packages/$1"
   if [ $? -ne 0 ]; then exit 1; fi
   ${*:2}
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Complete" "${TASK_NAME}"
+}
+
+function _sandbox_(){
+  local TASK_NAME="Execute command in sandbox container"
+  log "Start" "${TASK_NAME}"
+  docker-compose -f "${WORKSPACE_ROOT}/sandbox/docker-compose.yml" run sandbox ${*:1}
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Finish" "Run command"
+  docker-compose -f "${WORKSPACE_ROOT}/sandbox/docker-compose.yml" down
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
 }
