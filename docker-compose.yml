@@ -4,6 +4,7 @@ services:
   nginx:
     image: nginx:1.17.5-alpine
     tty: true
+    restart: always
     volumes:
       - type: bind
         source: ./packages/nginx/nginx.conf
@@ -28,11 +29,28 @@ services:
           - anoriqq.local
           - product.anoriqq.local
 
+  mongo:
+    image: mongo:4.2.1-bionic
+    tty: true
+    restart: always
+    volumes:
+      - ./packages/mongo/db:/data/db
+      # - ./packages/mongo/configdb:/data/configdb
+    domainname: mongo
+    hostname: mongo
+    ports:
+      - 27017:27017
+    networks:
+      product_network:
+    env_file:
+      - ./packages/mongo/.env
+
   portfolio:
     build:
       context: ./packages/portfolio
     init: true
     tty: true
+    restart: always
     domainname: portfolio
     hostname: portfolio
     expose:
@@ -48,6 +66,11 @@ services:
       context: ./packages/delay-tweet
     init: true
     tty: true
+    restart: always
+    volumes:
+      - type: bind
+        source: ./packages/delay-tweet
+        target: /usr/src/app
     domainname: delay-tweet
     hostname: delay-tweet
     expose:
@@ -56,7 +79,8 @@ services:
       product_network:
         aliases:
           - delay-tweet.anoriqq.local
-    env_file: ./packages/delay-tweet/.env
+    env_file:
+      - ./packages/delay-tweet/.env
     command: yarn debug
 
 networks:
