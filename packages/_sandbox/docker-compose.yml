@@ -10,3 +10,5 @@ services:
       - type: bind
         source: $PRODUCT_DIR
         target: /home/sandbox/product
+    env_file:
+      - $PRODUCT_DIR/packages/_sandbox/.env
