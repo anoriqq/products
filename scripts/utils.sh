@@ -8,12 +8,12 @@ function log(){
   local EMOJI_CODE=$3
   if [ "$3" = '' ]; then
     case "${LOG_TYPE}" in
-      "Run" ) EMOJI_CODE="\U1F680" ;;
-      "Start" ) EMOJI_CODE="\U26A1" ;;
-      "Finish" ) EMOJI_CODE="\U2728" ;;
-      "Skip" ) EMOJI_CODE="\U1F4DD" ;;
+      "Run"      ) EMOJI_CODE="\U1F680" ;;
+      "Start"    ) EMOJI_CODE="\U26A1"  ;;
+      "Finish"   ) EMOJI_CODE="\U2728"  ;;
+      "Skip"     ) EMOJI_CODE="\U1F4DD" ;;
       "Complete" ) EMOJI_CODE="\U1F389" ;;
-      "Error" ) EMOJI_CODE="\U1F525" ;;
+      "Error"    ) EMOJI_CODE="\U1F525" ;;
     esac
   fi
   local EMOJI=$(echo -e "${EMOJI_CODE}")
