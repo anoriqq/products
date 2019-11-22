@@ -1,8 +1,14 @@
+# 環境変数
 .env
-scripts/bin/*
+
+# バイナリ
+bin
 !scripts/bin/an
 node_modules
-sandbox/bin
-packages/nginx/certs
+
+# 成果物
 dist
+
+# rowデータ
 packages/mongo/db
+packages/nginx/certs

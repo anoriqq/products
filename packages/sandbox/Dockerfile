@@ -11,5 +11,5 @@ RUN adduser sandbox sudo
 
 USER sandbox
 
-WORKDIR /home/sandbox/workspace
+WORKDIR /home/sandbox/app
 CMD echo "created sandbox caontainer"
