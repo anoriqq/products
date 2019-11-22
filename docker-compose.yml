@@ -7,13 +7,13 @@ services:
     restart: always
     volumes:
       - type: bind
-        source: ./packages/nginx/nginx.conf
+        source: $WORKSPACE_DIR/packages/nginx/nginx.conf
         target: /etc/nginx/nginx.conf
       - type: bind
-        source: ./packages/nginx/conf.d
+        source: $WORKSPACE_DIR/packages/nginx/conf.d
         target: /etc/nginx/conf.d
       - type: bind
-        source: ./packages/nginx/certs
+        source: $WORKSPACE_DIR/packages/nginx/certs
         target: /etc/nginx/certs
     domainname: product.anoriqq.local
     hostname: product.anoriqq.local
@@ -34,20 +34,20 @@ services:
     tty: true
     restart: always
     volumes:
-      - ./packages/mongo/db:/data/db
-      # - ./packages/mongo/configdb:/data/configdb
+      - $WORKSPACE_DIR/packages/mongo/db:/data/db
+      # - $WORKSPACE_DIR/packages/mongo/configdb:/data/configdb
     domainname: mongo
     hostname: mongo
     ports:
-      - 27017:27017
+      - '27017:27017'
     networks:
       product_network:
     env_file:
-      - ./packages/mongo/.env
+      - $WORKSPACE_DIR/packages/mongo/.env
 
   portfolio:
     build:
-      context: ./packages/portfolio
+      context: $WORKSPACE_DIR/packages/portfolio
     init: true
     tty: true
     restart: always
@@ -63,13 +63,13 @@ services:
 
   delay-tweet:
     build:
-      context: ./packages/delay-tweet
+      context: $WORKSPACE_DIR/packages/delay-tweet
     init: true
     tty: true
     restart: always
     volumes:
       - type: bind
-        source: ./packages/delay-tweet
+        source: $WORKSPACE_DIR/packages/delay-tweet
         target: /usr/src/app
     domainname: delay-tweet
     hostname: delay-tweet
@@ -80,7 +80,7 @@ services:
         aliases:
           - delay-tweet.anoriqq.local
     env_file:
-      - ./packages/delay-tweet/.env
+      - $WORKSPACE_DIR/packages/delay-tweet/.env
     command: yarn debug
 
 networks:
