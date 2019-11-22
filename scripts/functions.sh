@@ -151,10 +151,7 @@ function _exec_(){
 function _sandbox_(){
   local TASK_NAME="Execute command in sandbox container"
   log "Start" "${TASK_NAME}"
-  docker-compose -f "$PRODUCT_DIR/sandbox/docker-compose.yml" run sandbox ${*:1}
-  if [ $? -ne 0 ]; then exit 1; fi
-  log "Finish" "Run command"
-  docker-compose -f "$PRODUCT_DIR/sandbox/docker-compose.yml" down
+  docker-compose -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm sandbox bash -c "${*:1}"
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
 }

@@ -9,8 +9,4 @@ services:
     volumes:
       - type: bind
         source: $PRODUCT_DIR
-        target: /home/sandbox/workspace
-    env_file:
-      - $PRODUCT_DIR/packages/_sandbox/.env
-      # - $PRODUCT_DIR/packages/delay-tweet/.env
-      # - $PRODUCT_DIR/packages/mongo/.env
+        target: /home/sandbox/product
