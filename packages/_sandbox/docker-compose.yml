@@ -3,16 +3,14 @@ version: '3.7'
 services:
   sandbox:
     image: anoriqq/sandbox
+    build:
+      context: $PRODUCT_DIR/packages/_sandbox
     tty: true
     volumes:
       - type: bind
-        source: "${WORKSPACE_ROOT}"
+        source: $PRODUCT_DIR
         target: /home/sandbox/workspace
-    environment:
-      - WORKSPACE_ROOT=/home/sandbox/workspace
     env_file:
-      - "${WORKSPACE_ROOT}/.env"
-      - "${WORKSPACE_ROOT}/sandbox/.env"
-      - "${WORKSPACE_ROOT}/packages/delay-tweet/.env"
-      - "${WORKSPACE_ROOT}/packages/mongo/.env"
-    command: ls -a
+      - $PRODUCT_DIR/packages/_sandbox/.env
+      # - $PRODUCT_DIR/packages/delay-tweet/.env
+      # - $PRODUCT_DIR/packages/mongo/.env

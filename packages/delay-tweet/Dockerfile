@@ -1,17 +1,16 @@
 FROM node:12.13.0-alpine
 
-ENV WORKDIR /usr/src/app
-
 WORKDIR /usr/src/app
 
-COPY ./package.json ./
+# COPY ./package.json ./
+# COPY ./yarn.lock ./
 
-RUN yarn install
+# RUN yarn install
 
-COPY . .
+# COPY . .
 
-RUN yarn build:client
-RUN yarn build:server
+# RUN yarn build:client
+# RUN yarn build:server
 
 EXPOSE 8000
-CMD ["node", "dist/index.js"]
+# CMD ["node", "dist/index.js"]

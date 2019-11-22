@@ -5,10 +5,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "debug": "yarn nodemon --watch 'src/**/*.ts' --exec 'yarn ts-node src/index.ts",
+    "debug:client": "yarn nodemon  src/server/index.ts",
+    "debug:server": "yarn nodemon  src/server/index.ts",
     "start": "node index.js",
-    "build:client": "webpack --config $WORKDIR/src/client/webpack.config.js",
-    "build:server": "webpack --config $WORKDIR/src/server/webpack.config.js"
+    "build:client": "WORKDIR=$WORKDIR webpack --config $WORKDIR/src/client/webpack.config.js",
+    "build:server": "WORKDIR=$WORKDIR webpack --config $WORKDIR/src/server/webpack.config.js",
+    "workdir": "echo $WORKDIR"
   },
   "dependencies": {
     "debug": "^4.1.1",

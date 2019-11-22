@@ -1,14 +1,14 @@
 #!/bin/sh
 
 WORKSPACE_ROOT=$(pwd)
-echo "WORKSPACE_ROOT: ${WORKSPACE_ROOT}"
+echo "WORKSPACE_ROOT: $PRODUCT_DIR"
 echo "ls -a: $(ls -a | tr '\n' '\t')"
 echo "\n"
 
 
 
 # mkcertバイナリを取得
-BIN_DIR=${WORKSPACE_ROOT}/sandbox/bin
+BIN_DIR=$PRODUCT_DIR/sandbox/bin
 MKCERT_BIN_PATH=${BIN_DIR}/mkcert
 if [ ! -e "${MKCERT_BIN_PATH}" ]; then
   if [ ! -d "$BIN_DIR" ]; then
@@ -22,7 +22,7 @@ fi
 # CAファイルをコピー
 sudo ${MKCERT_BIN_PATH} -install
 # ROOT CAのディレクトリをバインドしない場合は以下のコメントアウトを外す
-# WORKSPACE_CA_DIR=${WORKSPACE_ROOT}/packages/nginx/ca
+# WORKSPACE_CA_DIR=$PRODUCT_DIR/packages/nginx/ca
 # if [ ! -d "$WORKSPACE_CA_DIR" ]; then
 #   mkdir ${WORKSPACE_CA_DIR}
 # fi
@@ -30,7 +30,7 @@ sudo ${MKCERT_BIN_PATH} -install
 # sudo cp ${CA_DIR}/* ${WORKSPACE_CA_DIR}
 
 # certを作成
-CERT_DIR=${WORKSPACE_ROOT}/packages/nginx/certs
+CERT_DIR=$PRODUCT_DIR/packages/nginx/certs
 if [ ! -d "$CERT_DIR" ]; then
   mkdir ${CERT_DIR}
 fi

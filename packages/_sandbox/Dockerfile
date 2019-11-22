@@ -6,10 +6,9 @@ RUN apt-get install sudo curl -y
 ADD ./sudoers.txt /etc/sudoers
 RUN chmod 440 /etc/sudoers
 RUN useradd -ms /bin/bash sandbox
-# RUN echo "sandbox:sandbox" | chpasswd
 RUN adduser sandbox sudo
 
 USER sandbox
 
-WORKDIR /home/sandbox/app
-CMD echo "created sandbox caontainer"
+WORKDIR $WORK_DIR
+CMD echo 'Created sandbox caontainer'
