@@ -11,3 +11,9 @@
   ```sh
   an mkcert
   ```
+
+## example
+- `delay-tweet`で`yarn install`したくなったときは､
+  ```sh
+  an sandbox an exec delay-tweet yarn install
+  ```
