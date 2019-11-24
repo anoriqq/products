@@ -1,16 +1,16 @@
 #!/bin/bash
 
-UTILS_PATH=$PRODUCT_DIR/scripts/utils.sh
+UTILS_PATH=$LOCAL_PRODUCT_DIR/scripts/utils.sh
 source ${UTILS_PATH}
 
 
 
 # anコマンドの使い方の説明
 function _help_(){
-  local FUNCTION_FILE=$PRODUCT_DIR/scripts/functions.sh
+  local FUNCTION_FILE=$LOCAL_PRODUCT_DIR/scripts/functions.sh
   echo "   Usage: an COMMAND [ARG...]"
   echo "   COMMAND:"
-  grep -B 1 -E -e '^function\s_.*' ${FUNCTION_FILE}\
+  grep -B 1 -E -e '^function\s_.*' $FUNCTION_FILE\
     | grep -E '(^#|^function)'\
     | sed -z 's/\nfunction\s_/:/g'\
     | sed -r 's/(\s|#)//g'\
@@ -75,19 +75,20 @@ function _ps_(){
 
 # direnvをセットアップします
 function _direnv_(){
-  $PRODUCT_DIR/scripts/install-direnv.sh
+  $LOCAL_PRODUCT_DIR/scripts/install-direnv.sh
 }
 
 # nginxのためにmkcertでcertificationをセットアップします
 function _mkcert_(){
   local TASK_NAME='Create a certificate with mkcert'
   log "Start" "${TASK_NAME}"
-  load docker build -q --rm -t anoriqq/sandbox:latest $PRODUCT_DIR/sandbox
+  _sandbox_ $LOCAL_PRODUCT_DIR/packages/_sandbox/scripts/create-cert.sh
+  load docker build -q --rm -t anoriqq/sandbox:latest $LOCAL_PRODUCT_DIR/packages/_sandbox
   if [ $? -ne 0 ]; then exit 1; fi
   log "Finish" "Build sandbox docker image"
   cleanDockerImage
   docker run --rm \
-    -v $PRODUCT_DIR:/home/sandbox/workspace \
+    -v $LOCAL_PRODUCT_DIR:/home/sandbox/workspace \
     -v /c/Users/shota/AppData/Local/mkcert:/home/sandbox/.local/share/mkcert \
     anoriqq/sandbox \
     ./sandbox/scripts/create-cert.sh
@@ -140,7 +141,7 @@ function _po_(){
 function _exec_(){
   local TASK_NAME="Execute command in $1"
   log "Start" "${TASK_NAME}"
-  cd "$PRODUCT_DIR/packages/$1"
+  cd "$LOCAL_PRODUCT_DIR/packages/$1"
   if [ $? -ne 0 ]; then exit 1; fi
   if [ -e ".env" ]; then
     export $(cat .env | grep -v '^#' | xargs)
@@ -157,7 +158,7 @@ function _sandbox_(){
   local TASK_NAME="Execute command in sandbox container"
   log "Start" "${TASK_NAME}"
   log "Run" "${*:1} in sandbox"
-  docker-compose -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm sandbox bash -c "${*:1}"
+  docker-compose -f $LOCAL_PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm sandbox bash -c "${*:1}"
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
 }

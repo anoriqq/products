@@ -36,9 +36,10 @@ RUN node -v
 RUN npm -v
 RUN yarn -v
 
+# set environment variable
 ENV PATH $PATH:/home/sandbox/product/scripts/bin
 ENV PRODUCT_DIR /home/sandbox/product
 
 USER sandbox
-WORKDIR /home/sandbox/product
+WORKDIR $PRODUCT_DIR
 CMD echo 'Created sandbox caontainer'

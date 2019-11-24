@@ -72,8 +72,9 @@
     ls . # product
     cd ~/workspaces/product
     ```
-- [ ] `direnv`をインストールする
+- [ ] 開発に利用するターミナルに環境変数を設定する
   ```sh
-  cd ~/workspaces/product
-  sudo chmod +x ./scripts/install-direnv.sh && ./scripts/install-direnv.sh
+  # product
+  export LOCAL_PRODUCT_DIR=/home/anoriqq/workspace/product
+  export PATH=$PATH:$LOCAL_PRODUCT_DIR/scripts/bin
   ```

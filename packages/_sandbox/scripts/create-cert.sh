@@ -1,14 +1,13 @@
 #!/bin/sh
 
-WORKSPACE_ROOT=$(pwd)
-echo "WORKSPACE_ROOT: $PRODUCT_DIR"
+echo "PRODUCT_DIR: $PRODUCT_DIR"
 echo "ls -a: $(ls -a | tr '\n' '\t')"
 echo "\n"
 
 
 
 # mkcertバイナリを取得
-BIN_DIR=$PRODUCT_DIR/sandbox/bin
+BIN_DIR=$PRODUCT_DIR/packages/_sandbox/bin
 MKCERT_BIN_PATH=${BIN_DIR}/mkcert
 if [ ! -e "${MKCERT_BIN_PATH}" ]; then
   if [ ! -d "$BIN_DIR" ]; then

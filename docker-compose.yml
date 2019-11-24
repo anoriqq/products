@@ -7,13 +7,13 @@ services:
     restart: always
     volumes:
       - type: bind
-        source: $PRODUCT_DIR/packages/nginx/nginx.conf
+        source: $LOCAL_PRODUCT_DIR/packages/nginx/nginx.conf
         target: /etc/nginx/nginx.conf
       - type: bind
-        source: $PRODUCT_DIR/packages/nginx/conf.d
+        source: $LOCAL_PRODUCT_DIR/packages/nginx/conf.d
         target: /etc/nginx/conf.d
       - type: bind
-        source: $PRODUCT_DIR/packages/nginx/certs
+        source: $LOCAL_PRODUCT_DIR/packages/nginx/certs
         target: /etc/nginx/certs
     domainname: product.anoriqq.local
     hostname: product.anoriqq.local
@@ -34,8 +34,8 @@ services:
     tty: true
     restart: always
     volumes:
-      - $PRODUCT_DIR/packages/mongo/db:/data/db
-      # - $PRODUCT_DIR/packages/mongo/configdb:/data/configdb
+      - $LOCAL_PRODUCT_DIR/packages/mongo/db:/data/db
+      # - $LOCAL_PRODUCT_DIR/packages/mongo/configdb:/data/configdb
     domainname: mongo
     hostname: mongo
     ports:
@@ -43,11 +43,11 @@ services:
     networks:
       product_network:
     env_file:
-      - $PRODUCT_DIR/packages/mongo/.env
+      - $LOCAL_PRODUCT_DIR/packages/mongo/.env
 
   portfolio:
     build:
-      context: $PRODUCT_DIR/packages/portfolio
+      context: $LOCAL_PRODUCT_DIR/packages/portfolio
     init: true
     tty: true
     restart: always
@@ -63,13 +63,13 @@ services:
 
   delay-tweet:
     build:
-      context: $PRODUCT_DIR/packages/delay-tweet
+      context: $LOCAL_PRODUCT_DIR/packages/delay-tweet
     init: true
     tty: true
     restart: always
     volumes:
       - type: bind
-        source: $PRODUCT_DIR/packages/delay-tweet
+        source: $LOCAL_PRODUCT_DIR/packages/delay-tweet
         target: /usr/src/app
     domainname: delay-tweet
     hostname: delay-tweet
@@ -80,7 +80,7 @@ services:
         aliases:
           - delay-tweet.anoriqq.local
     env_file:
-      - $PRODUCT_DIR/packages/delay-tweet/.env
+      - $LOCAL_PRODUCT_DIR/packages/delay-tweet/.env
     command: yarn debug
 
 networks:
