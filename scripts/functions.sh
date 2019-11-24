@@ -142,6 +142,11 @@ function _exec_(){
   log "Start" "${TASK_NAME}"
   cd "$PRODUCT_DIR/packages/$1"
   if [ $? -ne 0 ]; then exit 1; fi
+  if [ -e ".env" ]; then
+    export $(cat .env | grep -v '^#' | xargs)
+    if [ $? -ne 0 ]; then exit 1; fi
+  fi
+  log "Run" "${*:2} in $1"
   ${*:2}
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
@@ -151,6 +156,7 @@ function _exec_(){
 function _sandbox_(){
   local TASK_NAME="Execute command in sandbox container"
   log "Start" "${TASK_NAME}"
+  log "Run" "${*:1} in sandbox"
   docker-compose -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm sandbox bash -c "${*:1}"
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
