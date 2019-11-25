@@ -33,6 +33,6 @@ app.use(serverError);
 
 // Create and listen server
 const server = createServer(app);
-server.listen(8000, '0.0.0.0', () => {
-  log(`${app.get('name')} server is listening on port ${app.get('port')}`);
+server.listen(app.get('port'), '0.0.0.0', () => {
+  log(`[${app.get('name')}] server is listening on port ${app.get('port')}`);
 });
