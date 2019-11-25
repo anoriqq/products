@@ -1,7 +1,9 @@
 #!/bin/bash
 
-FUNCTION_PATH=$PRODUCT_DIR/scripts/functions.sh
-UTILS_PATH=$PRODUCT_DIR/scripts/utils.sh
+# あんこ
+
+FUNCTION_PATH=$LOCAL_PRODUCT_DIR/scripts/functions.sh
+UTILS_PATH=$LOCAL_PRODUCT_DIR/scripts/utils.sh
 source ${FUNCTION_PATH}
 source ${UTILS_PATH}
 
@@ -9,7 +11,7 @@ source ${UTILS_PATH}
 
 log "Run" "$1 ${*:2}"
 
-cd $PRODUCT_DIR
+cd $LOCAL_PRODUCT_DIR
 
 if grep -e "^function _$1.*{$" $FUNCTION_PATH &> /dev/null
 then
