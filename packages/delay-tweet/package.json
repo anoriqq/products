@@ -5,8 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "debug:client": "yarn nodemon  src/server/index.ts",
-    "debug:server": "yarn nodemon  src/server/index.ts",
+    "debug": "yarn nodemon",
     "start": "node index.js",
     "build:client": "webpack --config $WORKDIR/src/client/webpack.config.js",
     "build:server": "webpack --config $WORKDIR/src/server/webpack.config.js",
