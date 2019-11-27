@@ -2,10 +2,8 @@
 
 # あんこ
 
-WORKSPACE_ROOT=${PRODUCT_DIR:-$LOCAL_PRODUCT_DIR}
-
-FUNCTION_PATH=$WORKSPACE_ROOT/scripts/functions.sh
-UTILS_PATH=$WORKSPACE_ROOT/scripts/utils.sh
+FUNCTION_PATH=$PRODUCT_DIR/scripts/functions.sh
+UTILS_PATH=$PRODUCT_DIR/scripts/utils.sh
 source ${FUNCTION_PATH}
 source ${UTILS_PATH}
 
@@ -13,7 +11,7 @@ source ${UTILS_PATH}
 
 log "Run" "$1 ${*:2}"
 
-cd $WORKSPACE_ROOT
+cd $PRODUCT_DIR
 
 if grep -e "^function _$1.*{$" $FUNCTION_PATH &> /dev/null
 then
