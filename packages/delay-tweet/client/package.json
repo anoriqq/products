@@ -15,6 +15,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@types/webpack": "^4.41.0",
+    "css-loader": "^3.2.0",
     "prettier": "^1.19.1",
     "pug-plain-loader": "^1.0.0",
     "raw-loader": "^4.0.0",
