@@ -1,5 +1,7 @@
 extends _layout
 
 block body
+  noscript
+    strong We're sorry but cli-ui doesn't work properly without JavaScript enabled. Please enable it to continue.
   #app
   script(src=`${bundlePath}/bundle.js`)
