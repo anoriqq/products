@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "*": ["@types/*"],
-      "@/*": ["src/*"],
+      "@src/*": ["src/*"],
     },
     "target": "esnext",
     "module": "esnext",
@@ -17,6 +17,7 @@
     "types": [
       // "webpack-env",
       "jest",
+      "vuetify"
     ],
     "lib": [
       "esnext",
@@ -39,5 +40,6 @@
   ],
   "files": [
     "@types/shims-vue.d.ts",
-  ]
+    "@types/shims-tsx.d.ts",
+  ],
 }

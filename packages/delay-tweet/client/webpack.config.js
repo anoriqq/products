@@ -1,5 +1,7 @@
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 /** @type import('webpack').Configuration */
 module.exports = {
@@ -7,9 +9,15 @@ module.exports = {
   target: 'web',
   devtool: 'source-map',
   resolve: {
-    extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.json'],
+    plugins: [new TsconfigPathsPlugin({})],
+    extensions: ['.vue', '.ts', '.tsx', '.js', '.jsx', '.json'],
+    modules: [
+      path.resolve('./node_modules'),
+      path.resolve('./src'),
+    ],
     alias: {
       vue$: 'vue/dist/vue.esm.js',
+      '@src': path.resolve(process.env.PRODUCT_DIR, 'client/src'),
     },
   },
   entry: {
@@ -26,7 +34,10 @@ module.exports = {
         test: /\.(ts|tsx)$/,
         exclude: /(node_modules|dist)/,
         loader: 'ts-loader',
-        options: { appendTsSuffixTo: [/\.vue$/] },
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+          configFile: path.resolve(process.env.PRODUCT_DIR, 'client/tsconfig.json'),
+        },
       },
       {
         test: /\.vue$/,
@@ -48,11 +59,33 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['vue-style-loader', 'css-loader'],
-      },
+      },{
+      test: /\.s(c|a)ss$/,
+      use: [
+        'vue-style-loader',
+        'css-loader',
+        {
+          loader: 'sass-loader',
+          options: {
+            implementation: require('sass'),
+            fiber: require('fibers'),
+            indentedSyntax: true
+          },
+          options: {
+            implementation: require('sass'),
+            sassOptions: {
+              fiber: require('fibers'),
+              indentedSyntax: true
+            },
+          },
+        },
+      ],
+    },
     ],
   },
   plugins: [
     new VueLoaderPlugin(),
+    new VuetifyLoaderPlugin(),
   ],
   resolve: {
     extensions: ['.ts', '.js'],

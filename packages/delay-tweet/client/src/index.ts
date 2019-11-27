@@ -1,6 +1,7 @@
 import Vue from 'vue';
+import vuetify from './plugins/vuetify';
 import App from './App.vue';
-// import router from './router';
 
-const app = new Vue(Object.assign(/* { router },  */App));
-app.$mount('#app');
+Vue.use(vuetify);
+
+new Vue(Object.assign(App, { vuetify })).$mount('#app');
