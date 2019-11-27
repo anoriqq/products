@@ -13,7 +13,7 @@
     "DEBUG": "express:application,request,app:*",
     "PORT": "8000"
   },
-  "exec": "ts-node ./src/index.ts",
+  "exec": "ts-node --project $PRODUCT_DIR/server/tsconfig.json $PRODUCT_DIR/server/src/index.ts",
   "ext": "js,json,ts",
   "verbose": true
 }
