@@ -11,7 +11,6 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "jsx": "preserve",
-    "allowJs": true, // for ts-node
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "types": [
