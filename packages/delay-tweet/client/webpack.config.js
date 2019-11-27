@@ -1,8 +1,6 @@
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
-console.log('PATH: ', path.resolve(process.env.PRODUCT_DIR, 'src/client/index.ts'));
-
 /** @type import('webpack').Configuration */
 module.exports = {
   mode: 'development',
@@ -15,7 +13,7 @@ module.exports = {
     },
   },
   entry: {
-    'bundle.js': path.resolve(process.env.PRODUCT_DIR, 'src/client/index.ts'),
+    'bundle.js': path.resolve(process.env.PRODUCT_DIR, 'client/src/index.ts'),
   },
   output: {
     path: path.resolve(process.env.PRODUCT_DIR, 'dist/public/js'),

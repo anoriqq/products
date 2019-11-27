@@ -1,5 +1,6 @@
 const path = require('path');
 
+/** @type import('webpack').Configuration */
 module.exports = {
   mode: 'development',
   target: 'node',
@@ -9,11 +10,11 @@ module.exports = {
   },
   devtool: 'source-map',
   entry: {
-    'bundle.js': path.resolve(process.env.WORKDIR, 'src/server/index.ts'),
+    'bundle.js': path.resolve(process.env.PRODUCT_DIR, 'server/src/index.ts'),
   },
   output: {
     filename: '[name]',
-    path: path.resolve(process.env.WORKDIR, 'dist/server'),
+    path: path.resolve(process.env.PRODUCT_DIR, 'dist/server'),
   },
   module: {
     exprContextCritical: false,
