@@ -11,15 +11,19 @@
   "dependencies": {
     "pug": "^2.0.4",
     "vue": "^2.6.10",
-    "vue-property-decorator": "^8.3.0"
+    "vue-property-decorator": "^8.3.0",
+    "vuetify": "^2.1.12"
   },
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@types/webpack": "^4.41.0",
     "css-loader": "^3.2.0",
+    "deepmerge": "^4.2.2",
+    "fibers": "^4.0.2",
     "prettier": "^1.19.1",
     "pug-plain-loader": "^1.0.0",
     "raw-loader": "^4.0.0",
+    "sass": "^1.23.7",
     "sass-loader": "^8.0.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.7.2",
