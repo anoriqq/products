@@ -7,9 +7,8 @@
   "scripts": {
     "debug": "yarn nodemon",
     "start": "node index.js",
-    "build:client": "webpack --config $WORKDIR/src/client/webpack.config.js",
-    "build:server": "webpack --config $WORKDIR/src/server/webpack.config.js",
-    "workdir": "echo $WORKDIR"
+    "build:client": "webpack --config $PRODUCT_DIR/src/client/webpack.config.js --progress --hide-modules",
+    "build:server": "webpack --config $PRODUCT_DIR/src/server/webpack.config.js --progress --hide-modules"
   },
   "dependencies": {
     "debug": "^4.1.1",
@@ -23,18 +22,23 @@
     "@types/debug": "^4.1.5",
     "@types/express": "^4.17.2",
     "@types/helmet": "^0.0.45",
+    "@types/jest": "^24.0.23",
     "@types/morgan": "^1.7.37",
     "@types/node": "^12.12.9",
+    "@types/webpack": "^4.41.0",
     "nodemon": "^1.19.4",
     "prettier": "1.19.1",
     "pug-plain-loader": "^1.0.0",
     "raw-loader": "^3.1.0",
+    "sass-loader": "^8.0.0",
     "stylus": "^0.54.7",
     "stylus-loader": "^3.0.2",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.5.2",
     "typescript": "^3.7.2",
     "vue-loader": "^15.7.2",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.10",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   }
