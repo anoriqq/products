@@ -1,15 +1,3 @@
 <template lang="pug">
-  h1 {{message}}
+  h1 Hello World!
 </template>
-
-<script lang="ts">
-import Vue from 'vue';
-
-export default class MyComp extends Vue {
-  message = 'Hello';
-};
-</script>
-
-<style lang="stylus" scoped>
-
-</style>
