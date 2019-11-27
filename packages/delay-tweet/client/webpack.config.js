@@ -1,29 +1,39 @@
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
+console.log('PATH: ', path.resolve(process.env.PRODUCT_DIR, 'src/client/index.ts'));
+
+/** @type import('webpack').Configuration */
 module.exports = {
   mode: 'development',
   target: 'web',
-  node: {
-    __dirname: false,
-    __filename: false,
-  },
   devtool: 'source-map',
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue', '.json'],
+    alias: {
+      vue$: 'vue/dist/vue.esm.js',
+    },
+  },
   entry: {
-    'bundle.js': path.resolve(process.env.WORKDIR, 'src/client/index.ts'),
+    'bundle.js': path.resolve(process.env.PRODUCT_DIR, 'src/client/index.ts'),
   },
   output: {
+    path: path.resolve(process.env.PRODUCT_DIR, 'dist/public/js'),
     filename: '[name]',
-    path: path.resolve(process.env.WORKDIR, 'dist/public/js'),
   },
   module: {
     exprContextCritical: false,
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.(ts|tsx)$/,
         exclude: /(node_modules|dist)/,
         loader: 'ts-loader',
         options: { appendTsSuffixTo: [/\.vue$/] },
+      },
+      {
+        test: /\.vue$/,
+        exclude: /(node_modules|dist)/,
+        loader: 'vue-loader'
       },
       {
         test: /\.pug$/,
@@ -38,8 +48,8 @@ module.exports = {
         ]
       },
       {
-        test: /\.vue$/,
-        loader: 'vue-loader'
+        test: /\.css$/,
+        use: ['vue-style-loader', 'css-loader'],
       },
     ],
   },
