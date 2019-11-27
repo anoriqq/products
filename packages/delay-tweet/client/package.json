@@ -1,0 +1,29 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "webpack --config $PRODUCT_DIR/client/webpack.config.js --progress --hide-modules"
+  },
+  "dependencies": {
+    "pug": "^2.0.4",
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "@types/webpack": "^4.41.0",
+    "prettier": "^1.19.1",
+    "pug-plain-loader": "^1.0.0",
+    "raw-loader": "^4.0.0",
+    "sass-loader": "^8.0.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
+    "vue-loader": "^15.7.2",
+    "vue-style-loader": "^4.1.2",
+    "vue-template-compiler": "^2.6.10",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}
