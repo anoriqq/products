@@ -75,6 +75,6 @@
 - [ ] 開発に利用するターミナルに環境変数を設定する
   ```sh
   # product
-  export LOCAL_PRODUCT_DIR=/home/anoriqq/workspace/product
-  export PATH=$PATH:$LOCAL_PRODUCT_DIR/scripts/bin
+  export PRODUCT_DIR=/home/anoriqq/workspace/product
+  export PATH=$PATH:$PRODUCT_DIR/scripts/bin
   ```
