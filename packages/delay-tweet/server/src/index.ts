@@ -16,12 +16,12 @@ const app = express();
 app.set('name', 'delay-tweet');
 app.set('port', process.env.PORT || 8000);
 app.set('view engine', 'pug');
-app.set('views', `${process.env.WORKDIR}/src/view`)
+app.set('views', `${process.env.PRODUCT_DIR}/server/view`)
 
 // Middleware setup
 app.use(helmet());
 app.use(morgan('dev', {stream: {write: msg => requestLogger(msg.trimEnd())}}));
-app.use(express.static(`${process.env.WORKDIR}/dist`));
+app.use(express.static(`${process.env.PRODUCT_DIR}/dist/public`));
 app.use(embedBundlePathToLocals);
 
 // Router setup
