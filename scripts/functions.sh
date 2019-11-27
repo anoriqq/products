@@ -143,6 +143,7 @@ function _exec_(){
   local TASK_NAME="Execute command in $1"
   log "Start" "${TASK_NAME}"
   cd "$WORKSPACE_ROOT/packages/$1"
+  export PRODUCT_DIR=$PWD
   if [ $? -ne 0 ]; then exit 1; fi
   if [ -e ".env" ]; then
     export $(cat .env | grep -v '^#' | xargs)
