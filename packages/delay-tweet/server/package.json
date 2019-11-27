@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "debug": "yarn nodemon",
+    "debug": "yarn nodemon --config $PRODUCT_DIR/server/nodemon.json",
     "build": "webpack --config $PRODUCT_DIR/server/webpack.config.js --progress --hide-modules"
   },
   "dependencies": {
@@ -23,7 +23,7 @@
     "@types/morgan": "^1.7.37",
     "@types/node": "^12.12.14",
     "@types/webpack": "^4.41.0",
-    "nodemon": "^2.0.1",
+    "nodemon": "^1.19.4",
     "prettier": "^1.19.1",
     "ts-loader": "^6.2.1",
     "ts-node": "^8.5.2",

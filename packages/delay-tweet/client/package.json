@@ -5,7 +5,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "webpack --config $PRODUCT_DIR/client/webpack.config.js --progress --hide-modules"
+    "build": "webpack --config $PRODUCT_DIR/client/webpack.config.js --progress --hide-modules",
+    "watch": "webpack --watch --config $PRODUCT_DIR/client/webpack.config.js --progress --hide-modules"
   },
   "dependencies": {
     "pug": "^2.0.4",

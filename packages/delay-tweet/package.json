@@ -2,44 +2,15 @@
   "name": "delay-tweet",
   "version": "1.0.0",
   "private": true,
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "install:all": "yarn install:server && yarn install:client",
+    "install:server": "cd $PRODUCT_DIR/server && yarn",
+    "install:client": "cd $PRODUCT_DIR/client && yarn",
     "debug": "cd $PRODUCT_DIR/server && yarn debug",
     "start": "node $PRODUCT_DIR/dist/server/bundle.js",
+    "watch": "cd $PRODUCT_DIR/client && yarn watch",
     "build:client": "cd $PRODUCT_DIR/client && yarn build",
     "build:server": "cd $PRODUCT_DIR/server && yarn build"
-  },
-  "dependencies": {
-    "debug": "^4.1.1",
-    "express": "^4.17.1",
-    "helmet": "^3.21.2",
-    "morgan": "^1.9.1",
-    "pug": "^2.0.4",
-    "vue": "^2.6.10"
-  },
-  "devDependencies": {
-    "@types/debug": "^4.1.5",
-    "@types/express": "^4.17.2",
-    "@types/helmet": "^0.0.45",
-    "@types/jest": "^24.0.23",
-    "@types/morgan": "^1.7.37",
-    "@types/node": "^12.12.9",
-    "@types/webpack": "^4.41.0",
-    "nodemon": "^1.19.4",
-    "prettier": "1.19.1",
-    "pug-plain-loader": "^1.0.0",
-    "raw-loader": "^3.1.0",
-    "sass-loader": "^8.0.0",
-    "stylus": "^0.54.7",
-    "stylus-loader": "^3.0.2",
-    "ts-loader": "^6.2.1",
-    "ts-node": "^8.5.2",
-    "typescript": "^3.7.2",
-    "vue-loader": "^15.7.2",
-    "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.6.10",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
   }
 }
