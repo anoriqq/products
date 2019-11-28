@@ -13,12 +13,13 @@ log "Run" "$1 ${*:2}"
 
 cd $PRODUCT_DIR
 
-if grep -e "^function _$1.*{$" $FUNCTION_PATH &> /dev/null
-then
-  COMMAND=${1:-help}
+if grep -e "^function _$1.*{$" $FUNCTION_PATH &> /dev/null;then
+  COMMAND=_${1:-help}_
+elif [ $(ls -1 $PRODUCT_DIR/packages | grep "^$1$") ];then
+  COMMAND="_exec_ $1"
 else
-  COMMAND=help
+  COMMAND=_help_
   log "Error" "$1: command no found"
 fi
 
-_${COMMAND}_ ${*:2} || (log "Error" "$COMMAND command failed"; exit 1)
+${COMMAND} ${*:2} || (log "Error" "$COMMAND command failed"; exit 1)
