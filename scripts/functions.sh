@@ -170,3 +170,12 @@ function _sandbox_(){
   # if [ $? -ne 0 ]; then exit 1; fi
   # log "Complete" "${TASK_NAME}"
 }
+
+function _sandboxBuild_(){
+  local TASK_NAME="Build sandbox container"
+  log "Start" "${TASK_NAME}"
+  docker-compose -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml build
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Finish" "docker-compose build"
+  log "Complete" "${TASK_NAME}"
+}
