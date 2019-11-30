@@ -7,10 +7,11 @@
     "install:all": "yarn install:server && yarn install:client",
     "install:server": "cd $PRODUCT_DIR/server && yarn",
     "install:client": "cd $PRODUCT_DIR/client && yarn",
-    "debug": "cd $PRODUCT_DIR/server && yarn debug",
-    "start": "node $PRODUCT_DIR/dist/server/bundle.js",
-    "watch": "cd $PRODUCT_DIR/client && yarn watch",
+    "build:all": "yarn build:server && yarn build:client",
+    "build:server": "cd $PRODUCT_DIR/server && yarn build",
     "build:client": "cd $PRODUCT_DIR/client && yarn build",
-    "build:server": "cd $PRODUCT_DIR/server && yarn build"
+    "start": "node $PRODUCT_DIR/server/dist/bundle.js",
+    "debug": "cd $PRODUCT_DIR/server && yarn debug",
+    "watch": "cd $PRODUCT_DIR/client && yarn watch"
   }
 }

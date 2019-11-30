@@ -21,7 +21,7 @@ app.set('views', `${process.env.PRODUCT_DIR}/server/view`)
 // Middleware setup
 app.use(helmet());
 app.use(morgan('dev', {stream: {write: msg => requestLogger(msg.trimEnd())}}));
-app.use(express.static(`${process.env.PRODUCT_DIR}/dist/public`));
+app.use(express.static(`${process.env.PRODUCT_DIR}/client/dist`));
 app.use(embedBundlePathToLocals);
 
 // Router setup

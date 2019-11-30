@@ -19,4 +19,4 @@ RUN yarn build:client
 RUN yarn build:server
 
 EXPOSE 8000
-CMD ["node", "$PRODUCT_DIR/dist/server/bundle.js"]
+CMD node $PRODUCT_DIR/server/dist/bundle.js

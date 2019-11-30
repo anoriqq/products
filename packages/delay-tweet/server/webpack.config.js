@@ -1,4 +1,5 @@
 const path = require('path');
+const nodeExternals = require('webpack-node-externals');
 
 /** @type import('webpack').Configuration */
 module.exports = {
@@ -14,19 +15,20 @@ module.exports = {
   },
   output: {
     filename: '[name]',
-    path: path.resolve(process.env.PRODUCT_DIR, 'dist/server'),
+    path: path.resolve(process.env.PRODUCT_DIR, 'server/dist'),
+    libraryTarget: 'commonjs2',
   },
   module: {
-    exprContextCritical: false,
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.(ts|tsx)$/,
         exclude: /(node_modules|dist)/,
         loader: 'ts-loader',
       },
     ],
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.tsx', '.js'],
   },
+  externals: [nodeExternals()],
 };

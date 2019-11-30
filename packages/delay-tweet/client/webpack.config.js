@@ -24,7 +24,7 @@ module.exports = {
     'bundle.js': path.resolve(process.env.PRODUCT_DIR, 'client/src/index.ts'),
   },
   output: {
-    path: path.resolve(process.env.PRODUCT_DIR, 'dist/public/js'),
+    path: path.resolve(process.env.PRODUCT_DIR, 'client/dist/js'),
     filename: '[name]',
   },
   module: {
