@@ -162,10 +162,10 @@ function _sandbox_(){
   # if [ $? -ne 0 ]; then exit 1; fi
   # log "Finish" "docker-compose build"
   if [ "${*:1}" = "" ]; then
-    docker-compose  -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm sandbox bash
+    docker-compose  -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm --service-ports sandbox bash
   else
     log "Run" "${*:1} in sandbox"
-    docker-compose -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm sandbox bash -c "${*:1}"
+    docker-compose -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm --service-ports sandbox bash -c "${*:1}"
   fi
   # if [ $? -ne 0 ]; then exit 1; fi
   # log "Complete" "${TASK_NAME}"

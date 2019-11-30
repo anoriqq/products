@@ -42,4 +42,5 @@ ENV PRODUCT_DIR /home/sandbox/product
 
 USER sandbox
 WORKDIR $PRODUCT_DIR
+EXPOSE 8000
 CMD echo 'Created sandbox caontainer'
