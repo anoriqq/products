@@ -5,12 +5,22 @@ services:
     image: anoriqq/sandbox
     build:
       context: $PRODUCT_DIR/packages/_sandbox
+    init: true
     tty: true
     volumes:
       - type: bind
         source: $PRODUCT_DIR
         target: /home/sandbox/product
     ports:
-      - 8000-8999:8000-8999
+      - '8000'
+      - '8010'
+      - '8020'
+      - '8030'
+      - '8040'
+      - '8050'
+      - '8060'
+      - '8070'
+      - '8080'
+      - '8090'
     env_file:
       - $PRODUCT_DIR/packages/_sandbox/.env
