@@ -1,0 +1,7 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/anoriqq-product/delay-tweet:$SHORT_SHA', './packages/delay-tweet']
+  env:
+    - '_NODE_ENV=production'
+    - '_PORT=80'
+images: ['gcr.io/anoriqq-product/delay-tweet:$SHORT_SHA']
