@@ -12,6 +12,7 @@
   "dependencies": {
     "debug": "^4.1.1",
     "express": "^4.17.1",
+    "got": "^10.0.0",
     "helmet": "^3.21.2",
     "morgan": "^1.9.1",
     "pug": "^2.0.4"
