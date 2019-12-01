@@ -5,11 +5,15 @@
   "license": "MIT",
   "scripts": {
     "install:all": "yarn install:server && yarn install:client",
-    "install:server": "cd $PRODUCT_DIR/server && yarn",
-    "install:client": "cd $PRODUCT_DIR/client && yarn",
+    "install:all:silent": "yarn install:server --silent && yarn install:client --silent",
+    "install:server": "cd $PRODUCT_DIR/server && yarn install",
+    "install:client": "cd $PRODUCT_DIR/client && yarn install",
     "build:all": "yarn build:server && yarn build:client",
     "build:server": "cd $PRODUCT_DIR/server && yarn build",
     "build:client": "cd $PRODUCT_DIR/client && yarn build",
+    "build:all:prod": "yarn build:server:prod && yarn build:client:prod",
+    "build:server:prod": "cd $PRODUCT_DIR/server && yarn build:prod",
+    "build:client:prod": "cd $PRODUCT_DIR/client && yarn build:prod",
     "start": "node $PRODUCT_DIR/server/dist/bundle.js",
     "debug": "cd $PRODUCT_DIR/server && yarn debug",
     "watch": "cd $PRODUCT_DIR/client && yarn watch"

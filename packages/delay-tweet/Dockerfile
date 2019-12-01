@@ -11,12 +11,11 @@ COPY ./client/yarn.lock ./client/
 COPY ./server/package.json ./server/
 COPY ./server/yarn.lock ./server/
 
-RUN yarn install:all
+RUN yarn install:all:silent
 
 COPY . .
 
-RUN yarn build:client
-RUN yarn build:server
+RUN yarn build:all:prod
 
 EXPOSE 8000
 CMD node $PRODUCT_DIR/server/dist/bundle.js

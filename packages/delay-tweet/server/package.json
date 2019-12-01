@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "debug": "yarn nodemon --config $PRODUCT_DIR/server/nodemon.json",
-    "build": "webpack --config $PRODUCT_DIR/server/webpack.config.js --progress --hide-modules"
+    "build": "webpack --config $PRODUCT_DIR/server/webpack.dev.js --progress",
+    "build:prod": "webpack --config $PRODUCT_DIR/server/webpack.prod.js --hide-modules"
   },
   "dependencies": {
     "debug": "^4.1.1",

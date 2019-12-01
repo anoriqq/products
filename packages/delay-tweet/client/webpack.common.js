@@ -1,13 +1,11 @@
+/** @type import('webpack').Configuration */
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
-/** @type import('webpack').Configuration */
 module.exports = {
-  mode: 'development',
   target: 'web',
-  devtool: 'source-map',
   resolve: {
     plugins: [new TsconfigPathsPlugin({})],
     extensions: ['.vue', '.ts', '.tsx', '.js', '.jsx', '.json'],
