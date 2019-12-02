@@ -1,4 +1,6 @@
 import express from 'express';
+import passport from 'passport';
+import session from 'express-session';
 import debug from 'debug';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -23,14 +25,23 @@ app.use(helmet());
 app.use(morgan('dev', {stream: {write: msg => requestLogger(msg.trimEnd())}}));
 app.use(express.static(`${process.env.PRODUCT_DIR}/client/public`));
 app.use(express.static(`${process.env.PRODUCT_DIR}/client/dist`));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(embedBundlePathToLocals);
 
 // Router setup
 app.use(router);
 
 // Error handler setup
-app.use(notFoundError);
 app.use(serverError);
+app.use(notFoundError);
 
 // Create and listen server
 const server = createServer(app);
