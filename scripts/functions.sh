@@ -171,6 +171,13 @@ function _sandbox_(){
   # log "Complete" "${TASK_NAME}"
 }
 
+# sandboxでコマンドを実行する
+function _s_(){
+  echo ${*:1}
+  # _sandbox_ ${*:1}
+}
+
+# sandboxのイメージをビルドする
 function _sandboxBuild_(){
   local TASK_NAME="Build sandbox container"
   log "Start" "${TASK_NAME}"
