@@ -1,4 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
+import debug from 'debug';
+
+const log = debug('app:error');
 
 export function embedBundlePathToLocals(req: Request, res: Response, next: NextFunction) {
   res.locals.bundlePath = `js`;
@@ -27,6 +30,7 @@ export function notFoundError(req: Request, res: Response, next: NextFunction) {
 }
 
 export function serverError(err: any, req: Request, res: Response, next: NextFunction) {
+  log(err);
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);

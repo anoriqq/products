@@ -2,12 +2,21 @@
   .App
     h1 {{message}}
     h3 {{time}}
+    v-container(fluid)
+      v-textarea(
+        v-model="text"
+        name="name"
+        fluid
+        label="Label"
+        auto-grow
+      )
     v-btn(
       class="ma-2"
       :loading="loading"
       :disabled="loading"
       @click="click"
     ) Tweet
+    a(href="/auth/twitter") ログイン
 </template>
 
 <script lang="ts">
@@ -18,6 +27,7 @@ export default class App extends Vue {
   message: string = 'This is a data';
   time: Date = new Date();
   loading: boolean = false;
+  text: string = '';
 
   mounted(){
     return this.setTime();
@@ -28,9 +38,30 @@ export default class App extends Vue {
       return this.time = new Date();
     }, 100);
   };
-  click(){
+  async click(){
     this.loading = true;
-    setTimeout(()=>{this.loading = false}, 3000);
+    const data = {
+      text: this.text,
+    };
+    const body = await fetch('/api/tweet', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data),
+    })
+      .then(response=>{
+        this.loading = false;
+        if(!response.ok) throw response;
+        this.text = '';
+        return response.json();
+      })
+      .catch(console.log);
+    if(!body) return;
+    return console.log(body);
   };
 };
 </script>
+
+<style lang="sass" scoped>
+.App
+  color: red
+</style>
