@@ -10,6 +10,7 @@
     "build:prod": "webpack --config $PRODUCT_DIR/server/webpack.prod.js --hide-modules"
   },
   "dependencies": {
+    "@types/twitter": "^1.7.0",
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "express-session": "^1.17.0",
@@ -17,9 +18,11 @@
     "helmet": "^3.21.2",
     "mongoose": "^5.7.13",
     "morgan": "^1.9.1",
+    "oauth-1.0a": "^2.2.6",
     "passport": "^0.4.0",
     "passport-twitter": "^1.0.4",
-    "pug": "^2.0.4"
+    "pug": "^2.0.4",
+    "twitter": "^1.7.1"
   },
   "devDependencies": {
     "@types/debug": "^4.1.5",
