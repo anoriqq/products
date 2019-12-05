@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   nginx:
+    container_name: nginx
     image: nginx:1.17.5-alpine
     tty: true
     restart: always
@@ -30,22 +31,30 @@ services:
           - product.anoriqq.local
 
   mongo:
+    container_name: mongo
     image: mongo:4.2.1-bionic
     tty: true
-    restart: always
+    # restart: always
     volumes:
       - $PRODUCT_DIR/packages/mongo/db:/data/db
-      # - $PRODUCT_DIR/packages/mongo/configdb:/data/configdb
-    domainname: mongo
-    hostname: mongo
+      - $PRODUCT_DIR/packages/mongo/mongod.conf:/etc/mongod.conf
+    domainname: mongodb
+    hostname: mongodb
+    expose:
+      - '27017'
     ports:
       - '27017:27017'
     networks:
       product_network:
     env_file:
       - $PRODUCT_DIR/packages/mongo/.env
+    command:
+      - '--auth'
+      # - '-f'
+      # - '/etc/mongod.conf'
 
   portfolio:
+    container_name: portfolio
     build:
       context: $PRODUCT_DIR/packages/portfolio
     init: true
@@ -62,6 +71,7 @@ services:
           - product.anoriqq.local
 
   delay-tweet:
+    container_name: delay-tweet
     build:
       context: $PRODUCT_DIR/packages/delay-tweet
     init: true
