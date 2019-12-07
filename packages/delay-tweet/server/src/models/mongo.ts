@@ -3,10 +3,14 @@ import debug from 'debug';
 
 const log = debug('app:mongo');
 
-// const username = process.env.MONGO_INITDB_ROOT_USERNAME;
-// const pass = process.env.MONGO_INITDB_ROOT_PASSWORD;
-// const url = `mongodb://${username}:${pass}@mongodb:27017/delay-tweet`;
-const url = `mongodb://mongodb:27017/delay-tweet`;
+const username = process.env.MONGO_INITDB_ROOT_USERNAME;
+const pass = process.env.MONGO_INITDB_ROOT_PASSWORD;
+// const username = process.env.MONGO_NON_ROOT_USERNAME;
+// const pass = process.env.MONGO_NON_ROOT_PASSWORD;
+// const url = `mongodb://${username}:${pass}@mongodb:27017/${dbName}`;
+// const url = `mongodb://mongodb:27017/${dbName}`;
+const dbName = 'delayTweet';
+const url = `mongodb://delay-tweet:delay-tweet@mongodb:27017/${dbName}`;
 const mongoOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
