@@ -10,5 +10,5 @@ node_modules
 dist
 
 # rowデータ
-packages/mongo/db
+packages/mongodb/db
 packages/nginx/certs
