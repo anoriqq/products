@@ -38,7 +38,7 @@ services:
     volumes:
       - $PRODUCT_DIR/packages/mongodb/db:/data/db
       - $PRODUCT_DIR/packages/mongodb/mongod.conf:/etc/mongod.conf
-      - $PRODUCT_DIR/packages/mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - $PRODUCT_DIR/packages/mongodb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
     domainname: mongodb
     hostname: mongodb
     expose:
