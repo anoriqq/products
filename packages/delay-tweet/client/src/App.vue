@@ -48,11 +48,12 @@ export default class App extends Vue {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data),
     })
-      .then(response=>{
+      .then(async response=>{
         this.loading = false;
-        if(!response.ok) throw response;
+        const body = await response.json();
+        if(!body.ok) throw body;
         this.text = '';
-        return response.json();
+        return body;
       })
       .catch(console.log);
     if(!body) return;
