@@ -30,28 +30,25 @@ services:
           - anoriqq.local
           - product.anoriqq.local
 
-  mongo:
-    container_name: mongo
+  mongodb:
+    container_name: mongodb
     image: mongo:4.2.1-bionic
     tty: true
-    # restart: always
+    restart: always
     volumes:
-      - $PRODUCT_DIR/packages/mongo/db:/data/db
-      - $PRODUCT_DIR/packages/mongo/mongod.conf:/etc/mongod.conf
+      - $PRODUCT_DIR/packages/mongodb/db:/data/db
+      - $PRODUCT_DIR/packages/mongodb/mongod.conf:/etc/mongod.conf
+      - $PRODUCT_DIR/packages/mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     domainname: mongodb
     hostname: mongodb
     expose:
       - '27017'
     ports:
-      - '27017:27017'
+      - '27017:27017' # For debug
     networks:
       product_network:
     env_file:
-      - $PRODUCT_DIR/packages/mongo/.env
-    command:
-      - '--auth'
-      # - '-f'
-      # - '/etc/mongod.conf'
+      - $PRODUCT_DIR/packages/mongodb/.env
 
   portfolio:
     container_name: portfolio
