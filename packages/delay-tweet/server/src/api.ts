@@ -6,7 +6,7 @@ const apiRouter = Router();
 
 apiRouter.post('/tweet', wrap(async (req, res) => {
   const { user } = req;
-  if (!user) throw 'require user';
+  if (!user) return res.json({ok: false, error: 'require user'});
   const { text } = req.body;
   await tweet(user, text).catch(err => {
     return { ok: false, err };
