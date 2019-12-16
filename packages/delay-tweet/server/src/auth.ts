@@ -9,7 +9,7 @@ const log = debug('app:auth');
 const options = {
   consumerKey: process.env.TWITTER_CONSUMER_KEY || '',
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET || '',
-  callbackURL: "https://delay-tweet.anoriqq.local/auth/twitter/callback"
+  callbackURL: `${process.env.FQDN}/auth/twitter/callback`,
 };
 passport.use(new TwitterStrategy(options, (accessToken, refreshToken, profile, done) => {
   const uq = {
