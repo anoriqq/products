@@ -149,7 +149,7 @@ function _exec_(){
     if [ $? -ne 0 ]; then exit 1; fi
   fi
   log "Run" "${*:2} in $1"
-  ${*:2}
+  bash -c "${*:2}"
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
 }
