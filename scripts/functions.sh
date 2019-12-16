@@ -190,3 +190,51 @@ function _sandboxBuild_(){
   log "Finish" "docker-compose build"
   log "Complete" "${TASK_NAME}"
 }
+
+# シークレットの暗号化
+function _encrypt_(){
+  local TASK_NAME="Encrypt secrets"
+  log "Start" "${TASK_NAME}"
+
+  if [ ! $(ls -1 $PRODUCT_DIR/packages | grep "^$1$") ]; then
+    log "Error" "Require package name"
+    exit 1
+  fi
+
+  local SECRET_DIR=$PRODUCT_DIR/packages/$1/secret
+  for file in `find $SECRET_DIR -name '*.env'`; do
+    gcloud kms encrypt \
+      --plaintext-file=$file \
+      --ciphertext-file=$file.enc \
+      --location=asia-northeast1 \
+      --keyring=delay-tweet-test \
+      --key=delay-tweet-json-cred
+    log "Finish" "Encrypt $file to $file.enc"
+  done
+
+  log "Complete" "${TASK_NAME}"
+}
+
+# シークレットの復号
+function _decrypt_(){
+  local TASK_NAME="Decrypt secrets"
+  log "Start" "${TASK_NAME}"
+
+  if [ ! $(ls -1 $PRODUCT_DIR/packages | grep "^$1$") ]; then
+    log "Error" "Require package name"
+    exit 1
+  fi
+
+  local SECRET_DIR=$PRODUCT_DIR/packages/$1/secret
+  for file in `find $SECRET_DIR -name '*.env.enc'`; do
+    gcloud kms decrypt \
+      --plaintext-file=${file%.*} \
+      --ciphertext-file=$file \
+      --location=asia-northeast1 \
+      --keyring=delay-tweet-test \
+      --key=delay-tweet-json-cred
+    log "Finish" "Decrypt $file to ${file%.*}"
+  done
+
+  log "Complete" "${TASK_NAME}"
+}
