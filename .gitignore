@@ -1,5 +1,6 @@
 # 環境変数
-.env
+*.env*
+!*.env.enc
 
 # バイナリ
 bin
