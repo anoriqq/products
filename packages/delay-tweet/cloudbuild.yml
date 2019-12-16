@@ -1,5 +1,14 @@
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/anoriqq-product/delay-tweet:$SHORT_SHA', './packages/delay-tweet']
+- name: gcr.io/cloud-builders/gcloud
+  args:
+  - kms
+  - decrypt
+  - --ciphertext-file=./packages/delay-tweet/secret/prod.env.enc
+  - --plaintext-file=./packages/delay-tweet/secret/prod.env
+  - --location=asia-northeast1
+  - --keyring=delay-tweet-test
+  - --key=delay-tweet-json-cred
+- name: gcr.io/cloud-builders/docker
+  args: ['build', '-t', 'gcr.io/anoriqq-product/delay-tweet:$SHORT_SHA', './packages/delay-tweet']
 
 images: ['gcr.io/anoriqq-product/delay-tweet:$SHORT_SHA']
