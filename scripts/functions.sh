@@ -154,6 +154,11 @@ function _exec_(){
   log "Complete" "${TASK_NAME}"
 }
 
+# 各パッケージでコマンドを実行する
+function _e_(){
+  _exec_ ${*:1}
+}
+
 # sandboxでコマンドを実行する
 function _sandbox_(){
   local TASK_NAME="Execute command in sandbox container"
@@ -173,8 +178,7 @@ function _sandbox_(){
 
 # sandboxでコマンドを実行する
 function _s_(){
-  echo ${*:1}
-  # _sandbox_ ${*:1}
+  _sandbox_ ${*:1}
 }
 
 # sandboxのイメージをビルドする
