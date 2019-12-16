@@ -88,7 +88,7 @@ services:
         aliases:
           - delay-tweet.anoriqq.local
     env_file:
-      - $PRODUCT_DIR/packages/delay-tweet/.env
+      - $PRODUCT_DIR/packages/delay-tweet/secret/local.env
     command: yarn debug
 
 networks:
