@@ -1,7 +1,5 @@
 FROM node:12.13.0-alpine
 
-ARG _PORT
-ENV PORT ${_PORT:-80}
 ENV PRODUCT_DIR /usr/src/app
 
 WORKDIR $PRODUCT_DIR
@@ -19,5 +17,5 @@ COPY . .
 
 RUN yarn build:all:prod
 
-EXPOSE $PORT
-CMD node $PRODUCT_DIR/server/dist/bundle.js
+CMD export $(grep -v '^#' ./secret/prod.env | xargs) \
+  && node $PRODUCT_DIR/server/dist/bundle.js
