@@ -18,11 +18,11 @@ function _help_(){
     | awk -F ':' '{ printf "       %-22s%s\n", $2, $1 }'
 }
 
-# すべてのコンテナを起動します
+# コンテナを起動します
 function _up_(){
   local TASK_NAME='Start-up all product system'
   log "Start" "${TASK_NAME}"
-  up
+  up ${*:1}
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
 }
@@ -36,12 +36,12 @@ function _down_(){
   log "Complete" "${TASK_NAME}"
 }
 
-# すべてのシステムを再起動します
+# システムを再起動します
 function _restart_(){
   local TASK_NAME='Stop all product system'
   log "Start" "${TASK_NAME}"
   down
-  up
+  up ${*:1}
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
 }

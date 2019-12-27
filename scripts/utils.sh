@@ -85,7 +85,7 @@ function load(){
 }
 
 function up(){
-  docker-compose up --build -d
+  docker-compose up --build -d ${*:1}
   if [ $? -ne 0 ]; then exit 1; fi
   log "Finish" "docker-compose up"
   docker ps -a
