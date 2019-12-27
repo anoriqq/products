@@ -59,7 +59,7 @@ function _logs_(){
 function _restartNginx_(){
   local TASK_NAME='Restart nginx'
   log "Start" "${TASK_NAME}"
-  docker exec -it product_nginx_1 nginx -s reload
+  docker exec -it nginx nginx -s reload
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
 }
