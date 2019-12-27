@@ -1,6 +1,8 @@
-# 環境変数
+# シークレット
 *.env*
 !*.env.enc
+# TODO 暗号化してignoreから外す
+credentials
 
 # バイナリ
 bin
