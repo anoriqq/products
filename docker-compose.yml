@@ -115,5 +115,29 @@ services:
       - $PRODUCT_DIR/packages/delay-tweet/secret/local.env
     command: yarn debug
 
+  youtube-comments:
+    container_name: youtube-comments
+    build:
+      context: $PRODUCT_DIR/packages/youtube-comments
+      dockerfile: dev.Dockerfile
+    init: true
+    tty: true
+    restart: always
+    volumes:
+      - type: bind
+        source: $PRODUCT_DIR/packages/youtube-comments
+        target: /usr/src/app
+    domainname: youtube-comments
+    hostname: youtube-comments
+    expose:
+      - '8000'
+    networks:
+      product_network:
+        aliases:
+          - youtube-comments.anoriqq.local
+    env_file:
+      - $PRODUCT_DIR/packages/youtube-comments/secret/local.env
+    command: yarn debug
+
 networks:
   product_network:
