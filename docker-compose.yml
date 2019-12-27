@@ -115,5 +115,29 @@ services:
       - $PRODUCT_DIR/packages/delay-tweet/secret/local.env
     command: yarn debug
 
+  niji-timestamp:
+    container_name: niji-timestamp
+    build:
+      context: $PRODUCT_DIR/packages/niji-timestamp
+      dockerfile: dev.Dockerfile
+    init: true
+    tty: true
+    restart: always
+    volumes:
+      - type: bind
+        source: $PRODUCT_DIR/packages/niji-timestamp
+        target: /usr/src/app
+    domainname: niji-timestamp
+    hostname: niji-timestamp
+    expose:
+      - '8000'
+    networks:
+      product_network:
+        aliases:
+          - niji-timestamp.anoriqq.local
+    env_file:
+      - $PRODUCT_DIR/packages/niji-timestamp/secret/local.env
+    command: yarn debug
+
 networks:
   product_network:
