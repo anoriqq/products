@@ -144,8 +144,8 @@ function _exec_(){
   cd "$PRODUCT_DIR/packages/$1"
   export PRODUCT_DIR=$PWD
   if [ $? -ne 0 ]; then exit 1; fi
-  if [ -e ".env" ]; then
-    export $(cat .env | grep -v '^#' | xargs)
+  if [ -e "./secret/local.env" ]; then
+    export $(cat ./secret/local.env | grep -v '^#' | xargs)
     if [ $? -ne 0 ]; then exit 1; fi
   fi
   log "Run" "${*:2} in $1"
