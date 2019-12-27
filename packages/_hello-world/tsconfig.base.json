@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "importHelpers": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": true,
+  },
+  "exclude": [
+    "node_modules",
+  ],
+  "tslib": {}
+}

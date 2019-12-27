@@ -1,0 +1,40 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@t/*": ["@types/*"],
+    },
+    "typeRoots": [
+      "@types",
+      "node_modules/@types",
+    ],
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "types": [
+      // "webpack-env",
+      // "jest",
+    ],
+    "lib": [
+      "dom",
+      "esnext",
+      "scripthost",
+    ],
+    "sourceMap": true,
+    "noImplicitAny": true,
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+  ],
+  "exclude": [
+    "node_modules",
+  ],
+}
