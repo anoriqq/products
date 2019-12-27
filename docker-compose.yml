@@ -1,6 +1,30 @@
 version: '3.7'
 
 services:
+  hello-world:
+    container_name: hello-world
+    build:
+      context: $PRODUCT_DIR/packages/_hello-world
+      dockerfile: dev.Dockerfile
+    init: true
+    tty: true
+    restart: always
+    volumes:
+      - type: bind
+        source: $PRODUCT_DIR/packages/_hello-world
+        target: /usr/src/app
+    domainname: hello-world
+    hostname: hello-world
+    expose:
+      - '8000'
+    networks:
+      product_network:
+        aliases:
+          - hello-world.anoriqq.local
+    env_file:
+      - $PRODUCT_DIR/packages/_hello-world/secret/local.env
+    command: yarn debug
+
   nginx:
     container_name: nginx
     image: nginx:1.17.5-alpine
