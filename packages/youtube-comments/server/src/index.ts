@@ -10,6 +10,14 @@ import { router } from './router';
 const log = debug('app:server');
 const requestLogger = debug('request');
 
+// Connect Mongodb
+import { connectMongodb } from './mongodb';
+connectMongodb();
+
+// Worker run
+import { workerGettingComment } from './worker';
+workerGettingComment.updateVideos();
+
 // App setup
 const app = express();
 app.set('name', 'niji-timestamp');
