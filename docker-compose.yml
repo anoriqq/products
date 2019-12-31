@@ -163,7 +163,6 @@ services:
           - youtube-comments.anoriqq.local
     env_file:
       - $PRODUCT_DIR/packages/youtube-comments/secret/local.env
-    command: yarn debug
 
 networks:
   product_network:
