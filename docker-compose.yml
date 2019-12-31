@@ -6,6 +6,8 @@ services:
     build:
       context: $PRODUCT_DIR/packages/_hello-world
       dockerfile: dev.Dockerfile
+    depends_on:
+      - nginx
     init: true
     tty: true
     restart: always
@@ -94,6 +96,8 @@ services:
     container_name: portfolio
     build:
       context: $PRODUCT_DIR/packages/portfolio
+    depends_on:
+      - nginx
     init: true
     tty: true
     restart: always
@@ -112,6 +116,9 @@ services:
     build:
       context: $PRODUCT_DIR/packages/delay-tweet
       dockerfile: dev.Dockerfile
+    depends_on:
+      - nginx
+      - mongodb
     init: true
     tty: true
     restart: always
@@ -136,6 +143,9 @@ services:
     build:
       context: $PRODUCT_DIR/packages/youtube-comments
       dockerfile: dev.Dockerfile
+    depends_on:
+      - nginx
+      - mongodb-runner
     init: true
     tty: true
     restart: always
