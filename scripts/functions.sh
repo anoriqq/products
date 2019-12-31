@@ -20,7 +20,7 @@ function _help_(){
 
 # コンテナを起動します
 function _up_(){
-  local TASK_NAME='Start-up all product system'
+  local TASK_NAME='Start-up product system : ${*:1}'
   log "Start" "${TASK_NAME}"
   up ${*:1}
   if [ $? -ne 0 ]; then exit 1; fi
@@ -38,7 +38,7 @@ function _down_(){
 
 # システムを再起動します
 function _restart_(){
-  local TASK_NAME='Stop all product system'
+  local TASK_NAME='Restart product system'
   log "Start" "${TASK_NAME}"
   down
   up ${*:1}
