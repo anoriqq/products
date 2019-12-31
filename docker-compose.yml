@@ -62,7 +62,6 @@ services:
     volumes:
       - $PRODUCT_DIR/packages/mongodb/db:/data/db
       - $PRODUCT_DIR/packages/mongodb/mongod.conf:/etc/mongod.conf
-      - $PRODUCT_DIR/packages/mongodb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
     domainname: mongodb
     hostname: mongodb
     expose:
@@ -73,6 +72,23 @@ services:
       product_network:
     env_file:
       - $PRODUCT_DIR/packages/mongodb/.env
+
+  mongodb-runner:
+    container_name: mongodb-runner
+    image: mongo:4.2.1-bionic
+    depends_on:
+      - mongodb
+    tty: true
+    restart: always
+    volumes:
+      - $PRODUCT_DIR/packages/mongodb/createMongodbUser.js:/createMongodbUser.js
+    domainname: mongodb-runner
+    hostname: mongodb-runner
+    networks:
+      product_network:
+    env_file:
+      - $PRODUCT_DIR/packages/mongodb/.env
+    command: mongo --host mongodb --port 27017  --authenticationDatabase "admin" -u "admin-user" -p "admin-password" /createMongodbUser.js
 
   portfolio:
     container_name: portfolio
