@@ -9,7 +9,7 @@ const api = Router();
 api.get('/get-video-info', wrap(async (req, res) => {
   const { videoId } = req.query;
   const videoInfo = await getVideoInfo(videoId);
-  log(videoInfo);
+  log({videoId: videoInfo.videoId});
   return res.json(videoInfo);
 }));
 

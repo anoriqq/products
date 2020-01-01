@@ -6,7 +6,7 @@ db.getSiblingDB('delay-tweet').createUser({
     role: 'readWrite',
   }],
 });
-db.getSiblingDB('delay-tweet').createCollection('test');
+// db.getSiblingDB('delay-tweet').createCollection('test');
 
 db.getSiblingDB('youtube-comments').createUser({
   user: 'youtube-comments',
@@ -16,4 +16,4 @@ db.getSiblingDB('youtube-comments').createUser({
     role: 'readWrite',
   }],
 });
-db.getSiblingDB('youtube-comments').createCollection('test');
+// db.getSiblingDB('youtube-comments').createCollection('test');

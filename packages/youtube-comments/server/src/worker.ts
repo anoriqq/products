@@ -1,21 +1,23 @@
-import debug from 'debug';
+import { EventEmitter } from 'events';
 import got from 'got';
 import { get } from 'lodash';
 
+import { createWebSocketServer } from './websocket';
 import { Video, Comment } from './models';
-import { EventEmitter } from 'events';
 
+// Logger
+import debug from 'debug';
 const log = debug('app:worker');
 
-interface videoObj {
+export interface videoObj {
   videoId: string,
   timer: NodeJS.Timeout|null,
   timeoutMs: number,
   continuation?: string,
 };
 
-// APIので取得したコメントの型
-interface commentObj {
+// APIで取得したコメントの型
+export interface commentObj {
   liveChatTextMessageRenderer?: {
     id: string,
     authorBadges: any,
@@ -35,7 +37,7 @@ interface commentObj {
 }
 
 // mongodbに保存する型
-interface comment {
+export interface comment {
   commentId: string,
   videoId: string,
   timestampUsec: string,
@@ -79,7 +81,7 @@ class WorkerGettingComment extends EventEmitter {
       return initedVideo;
     });
     this.videos.push(...initedVideosAry);
-    log({ videos: this.videos });
+    log({ videos: this.videos.map(v => { return v.videoId }) });
     return;
   }
 
@@ -118,15 +120,16 @@ class WorkerGettingComment extends EventEmitter {
     if (!actions) return log({ message: '新規コメントなし', videoId: v.videoId });
     const commentsToSave: comment[] = actions.map((action: any)=>{
       const comment: commentObj = get(action, 'addChatItemAction.item');
-      if(!comment) return log({ message: 'コメント以外のアクション', videoId: v.videoId, action });
+      if(!comment) return/*  log({ message: 'コメント以外のアクション', videoId: v.videoId, action }) */;
       return this.sortingComment({comment, videoId: v.videoId});
     }).filter((x: any)=>x);
-    log({ message: 'コメント取得', newCommentsCount: commentsToSave.length, videoId: v.videoId });
+    log({ message: 'コメント取得', videoId: v.videoId, newCommentsCount: commentsToSave.length });
     await Comment.insertMany(commentsToSave, { ordered: false }).catch(err => {
       const regex = /E11000 duplicate key error collection: youtube-comments.comments index: commentId_1 dup key: { commentId: ".*" }/;
       if (!regex.test(err.message)) throw err;
     });
-    return this.emit('updateComments', {videoId: v.videoId});
+    createWebSocketServer.sendComment({videoId: v.videoId, comments: commentsToSave});
+    return;
   }
 
   private sortingComment({ comment: c, videoId }: {comment: commentObj, videoId: string}): comment|void {

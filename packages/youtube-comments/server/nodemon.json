@@ -11,7 +11,7 @@
   ],
   "env": {
     "NODE_ENV": "development",
-    "DEBUG": "express:application,node,request,app:*",
+    "DEBUG": "express:application,node,request,socket.io:namespace,socket.io:socket,socket.io:server,app*",
     "PORT": "8000"
   },
   "exec": "ts-node --project $PRODUCT_DIR/server/tsconfig.json $PRODUCT_DIR/server/src/index.ts",
