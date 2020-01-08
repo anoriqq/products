@@ -69,7 +69,7 @@ function _restartNginx_(){
 function _ps_(){
   local TASK_NAME='Display docker container list'
   log "Start" "${TASK_NAME}"
-  docker ps -a
+  docker-compose ps -a
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
 }
