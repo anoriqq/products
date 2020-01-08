@@ -51,7 +51,7 @@ export class App extends Component<{}, State> {
     liveChatClient.onChange(msg => {
       this.setState(state => {
         let newMessages = sortBy(uniqBy([...state.messages, ...msg], 'commentId'), ['timestampUsec']);
-        const maxMessagesLength = 100;
+        const maxMessagesLength = 500;
         if (newMessages.length > maxMessagesLength) {
           newMessages.splice(0, newMessages.length - maxMessagesLength);
         }
