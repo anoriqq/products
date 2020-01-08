@@ -88,7 +88,7 @@ function up(){
   docker-compose up --build -d ${*:1}
   if [ $? -ne 0 ]; then exit 1; fi
   log "Finish" "docker-compose up"
-  docker ps -a
+  docker-compose ps -a
   if [ $? -ne 0 ]; then exit 1; fi
 }
 
@@ -96,6 +96,6 @@ function down(){
   docker-compose down
   if [ $? -ne 0 ]; then exit 1; fi
   log "Finish" "docker-compose down"
-  docker ps -a
+  docker-compose ps -a
   if [ $? -ne 0 ]; then exit 1; fi
 }

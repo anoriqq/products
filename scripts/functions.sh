@@ -20,7 +20,8 @@ function _help_(){
 
 # コンテナを起動します
 function _up_(){
-  local TASK_NAME='Start-up all product system'
+  local SERVICES=${*:1}
+  local TASK_NAME="Start-up product system : ${SERVICES:-all}"
   log "Start" "${TASK_NAME}"
   up ${*:1}
   if [ $? -ne 0 ]; then exit 1; fi
@@ -38,7 +39,7 @@ function _down_(){
 
 # システムを再起動します
 function _restart_(){
-  local TASK_NAME='Stop all product system'
+  local TASK_NAME='Restart product system'
   log "Start" "${TASK_NAME}"
   down
   up ${*:1}
@@ -59,7 +60,7 @@ function _logs_(){
 function _restartNginx_(){
   local TASK_NAME='Restart nginx'
   log "Start" "${TASK_NAME}"
-  docker exec -it product_nginx_1 nginx -s reload
+  docker exec -it nginx nginx -s reload
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
 }
@@ -68,7 +69,7 @@ function _restartNginx_(){
 function _ps_(){
   local TASK_NAME='Display docker container list'
   log "Start" "${TASK_NAME}"
-  docker ps -a
+  docker-compose ps -a
   if [ $? -ne 0 ]; then exit 1; fi
   log "Complete" "${TASK_NAME}"
 }
@@ -170,7 +171,7 @@ function _sandbox_(){
     docker-compose  -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm --service-ports sandbox bash
   else
     log "Run" "${*:1} in sandbox"
-    docker-compose -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm --service-ports sandbox bash -c "${*:1}"
+    docker-compose -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm --service-ports sandbox /bin/bash -c '$0' "${*:1}"
   fi
   # if [ $? -ne 0 ]; then exit 1; fi
   # log "Complete" "${TASK_NAME}"

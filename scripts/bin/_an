@@ -1,0 +1,85 @@
+#compdef an
+
+function _an(){
+  _arguments '*: :->cmd'
+  if [[ "$state" == "cmd" ]];then
+    if (( CURRENT == 2 )); then # 1つ目のサブコマンド
+      subcommand
+      services
+    elif (( CURRENT == 3 )); then # 2つ目のサブコマンド
+      if [ $(ls -1 $PRODUCT_DIR/packages | grep "^${words[2]}$") ];then
+        _values '' 'an'
+      else
+        case "${words[$(( $CURRENT - 1 ))]}" in
+          'e'|'exec')
+            services
+            ;;
+          's'|'sandbox')
+            _values '' 'an'
+            ;;
+          'an')
+            subcommand
+            services
+            ;;
+          'up'|'restart')
+            services
+            ;;
+          *)
+            return
+            ;;
+        esac
+      fi
+    else # 3つ目以降のサブコマンド
+      local word="${words[$(( $CURRENT - 1 ))]}"
+      if [ $(ls -1 $PRODUCT_DIR/packages | grep "^$word$") ];then
+        _values '' 'an'
+        return
+      elif [ "$word" = 'an' ];then
+        subcommand
+        services
+      else
+        case "$word" in
+          *)
+            subcommand
+            ;;
+        esac
+      fi
+    fi
+  fi
+}
+
+function subcommand(){
+  local -a _subcommand
+
+  _subcommand=(
+    'help'
+    'up'
+    'down'
+    'restart'
+    'logs'
+    'restartNginx'
+    'ps'
+    'direnv'
+    'mkcert'
+    'cleanDockerImage'
+    'cleanDockerContainer'
+    'po'
+    'exec'
+    'e'
+    'sandbox'
+    's'
+    'sandboxBuild'
+    'encrypt'
+    'decrypt'
+  )
+  _describe -t commands "Subcommand" _subcommand
+}
+
+function services(){
+  local servicesList
+  local -a _services
+  servicesList=`find $PRODUCT_DIR/packages/* -maxdepth 0 -type d -exec basename '{}' ';'`
+
+  _services=( $(echo $servicesList) )
+  _describe -t services "Services" _services
+}

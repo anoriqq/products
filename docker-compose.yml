@@ -6,6 +6,8 @@ services:
     build:
       context: $PRODUCT_DIR/packages/_hello-world
       dockerfile: dev.Dockerfile
+    depends_on:
+      - nginx
     init: true
     tty: true
     restart: always
@@ -54,6 +56,22 @@ services:
           - anoriqq.local
           - product.anoriqq.local
 
+  redis:
+    container_name: redis
+    image: redis:6.0-rc1-alpine
+    tty: true
+    restart: always
+    volumes:
+      - $PRODUCT_DIR/packages/redis/data:/data
+    domainname: redis
+    hostname: redis
+    expose:
+      - '6379'
+    networks:
+      product_network:
+    env_file:
+      - $PRODUCT_DIR/packages/redis/.env
+
   mongodb:
     container_name: mongodb
     image: mongo:4.2.1-bionic
@@ -62,7 +80,6 @@ services:
     volumes:
       - $PRODUCT_DIR/packages/mongodb/db:/data/db
       - $PRODUCT_DIR/packages/mongodb/mongod.conf:/etc/mongod.conf
-      - $PRODUCT_DIR/packages/mongodb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
     domainname: mongodb
     hostname: mongodb
     expose:
@@ -74,10 +91,28 @@ services:
     env_file:
       - $PRODUCT_DIR/packages/mongodb/.env
 
+  mongodb-runner:
+    container_name: mongodb-runner
+    image: mongo:4.2.1-bionic
+    depends_on:
+      - mongodb
+    tty: true
+    volumes:
+      - $PRODUCT_DIR/packages/mongodb/createMongodbUser.js:/createMongodbUser.js
+    domainname: mongodb-runner
+    hostname: mongodb-runner
+    networks:
+      product_network:
+    env_file:
+      - $PRODUCT_DIR/packages/mongodb/.env
+    command: mongo --host mongodb --port 27017  --authenticationDatabase "admin" -u "admin-user" -p "admin-password" /createMongodbUser.js
+
   portfolio:
     container_name: portfolio
     build:
       context: $PRODUCT_DIR/packages/portfolio
+    depends_on:
+      - nginx
     init: true
     tty: true
     restart: always
@@ -96,6 +131,9 @@ services:
     build:
       context: $PRODUCT_DIR/packages/delay-tweet
       dockerfile: dev.Dockerfile
+    depends_on:
+      - nginx
+      - mongodb
     init: true
     tty: true
     restart: always
@@ -114,6 +152,34 @@ services:
     env_file:
       - $PRODUCT_DIR/packages/delay-tweet/secret/local.env
     command: yarn debug
+
+  youtube-comments:
+    container_name: youtube-comments
+    build:
+      context: $PRODUCT_DIR/packages/youtube-comments
+      dockerfile: dev.Dockerfile
+    depends_on:
+      - nginx
+      - mongodb-runner
+      - redis
+    init: true
+    tty: true
+    restart: always
+    volumes:
+      - type: bind
+        source: $PRODUCT_DIR/packages/youtube-comments
+        target: /usr/src/app
+    domainname: youtube-comments
+    hostname: youtube-comments
+    expose:
+      - '8000'
+      - '3000'
+    networks:
+      product_network:
+        aliases:
+          - youtube-comments.anoriqq.local
+    env_file:
+      - $PRODUCT_DIR/packages/youtube-comments/secret/local.env
 
 networks:
   product_network:
