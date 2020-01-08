@@ -2,6 +2,7 @@ import got from 'got';
 import debug from 'debug';
 
 import { Video } from '../models/video';
+import { Comment } from '../models/comment';
 import { workerGettingComment } from '../worker';
 
 const log = debug('app:api:logic');
@@ -35,4 +36,8 @@ async function getContinuations(videoId: string): Promise<{videoId: string, cont
   return { videoId, continuation };
 }
 
-export { getVideoInfo };
+async function getFirstComments(videoId: string) {
+  const docs = Comment.find({ videoId }, {_id: 0, __v: 0}, { sort: { timestampUsec: -1 }, limit: 35});
+  return docs;
+}
+
