@@ -20,7 +20,8 @@ function _help_(){
 
 # コンテナを起動します
 function _up_(){
-  local TASK_NAME='Start-up product system : ${*:1}'
+  local SERVICES=${*:1}
+  local TASK_NAME="Start-up product system : ${SERVICES:-all}"
   log "Start" "${TASK_NAME}"
   up ${*:1}
   if [ $? -ne 0 ]; then exit 1; fi
