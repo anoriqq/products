@@ -96,7 +96,11 @@ class WorkerGettingComment extends EventEmitter {
     if (v.timer) clearTimeout(v.timer);
     if (v.continuation) v.continuation = '';
     await Video.findOneAndUpdate({ videoId: v.videoId }, { $set: { isLive: false } });
-    log({ message: 'ライブ配信終了', videoId: v.videoId });
+    this.videos.splice(this.videos.findIndex(video => { return video.videoId === v.videoId }), 1);
+    createWebSocketServer.endLive({videoId: v.videoId});
+    const commentsCount = await getCommentsCount(v.videoId);
+    log({ message: 'ライブ配信終了', videoId: v.videoId, commentsCount });
+    log({ videos: this.videos.map(v => { return v.videoId }) });
     return;
   }
 
