@@ -41,3 +41,9 @@ async function getFirstComments(videoId: string) {
   return docs;
 }
 
+async function getCommentsCount(videoId: string) {
+  const count = await Comment.find({ videoId }).countDocuments();
+  return count;
+}
+
+export { getVideoInfo, getFirstComments, getCommentsCount };
