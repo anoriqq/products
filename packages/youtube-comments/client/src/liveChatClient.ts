@@ -8,20 +8,9 @@ const log = debug('app:liveChatClient');
 
 export class LiveChatClient {
   private videoId: string;
-  private onChangeHandler: () => void;
+  private onChangeHandler: (messages: Message[]) => void;
 
-  public messages: {
-    text: string,
-    authorName: string,
-    timestampUsec: string,
-    purchaseAmountText?: string,
-    badgesInfo?: {
-      owner?: any,
-      verified?: any,
-      moderator?: any,
-      member?: any,
-    },
-  }[];
+  public messages: Message[];
 
   constructor(videoId?: string) {
     this.videoId = '';
@@ -35,6 +24,7 @@ export class LiveChatClient {
 
     this.videoId = validatedVideoId;
     this.init().catch(err=>log(err));
+    socketClient.setReconnectVideoId(this.videoId);
   }
 
   private async init() {
@@ -43,12 +33,12 @@ export class LiveChatClient {
     if (!body) return console.error(new Error('動画情報の取得に失敗しました'));
     if (!body.isLive) return log('ライブ配信は終了しています');
     log('コメントの取得を開始します');
-    socketClient.setHandler((data: {videoId: string, comments: any}) => {
+    socketClient.setCommentUpdateHandler((data: {videoId: string, comments: any}) => {
       this.messages.push(...data.comments);
-      this.onChangeHandler();
+      this.onChangeHandler(this.messages);
       return;
     });
-    socketClient.getComment(this.videoId);
+    socketClient.startGettingComment(this.videoId);
     return;
   }
 
@@ -61,7 +51,21 @@ export class LiveChatClient {
     return null;
   }
 
-  public onChange(handler: ()=>void) {
+  public onChange(handler: (messages: Message[])=>void) {
     this.onChangeHandler = handler;
   }
+}
+
+export interface Message {
+  commentId: string,
+  text: string,
+  authorName: string,
+  timestampUsec: string,
+  purchaseAmountText?: string,
+  badgesInfo?: {
+    owner?: any,
+    verified?: any,
+    moderator?: any,
+    member?: any,
+  },
 }
