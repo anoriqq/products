@@ -4,7 +4,7 @@ const log = debug('app:App');
 
 // Packages
 import React, { Component } from 'react';
-import { uniqBy } from 'lodash';
+import { uniqBy, sortBy } from 'lodash';
 
 // Modules
 import { LiveChatClient, Message } from './liveChatClient';
@@ -48,14 +48,17 @@ export class App extends Component<{}, State> {
   private setVideo(e: React.MouseEvent) {
     e.preventDefault();
     const liveChatClient =  new LiveChatClient(this.state.videoIdString);
-    liveChatClient.onChange((messages) => {
-      this.setState(state=>({
-        messages: uniqBy(Array<Message>().concat(state.messages, messages), 'commentId'),
-      }));
-      if (this.state.messages.length < 1000) return;
-      this.setState(state=>({
-        messages: state.messages.splice(0, state.messages.length - 1000),
-      }));
+    liveChatClient.onChange(msg => {
+      this.setState(state => {
+        let newMessages = sortBy(uniqBy([...state.messages, ...msg], 'commentId'), ['timestampUsec']);
+        const maxMessagesLength = 100;
+        if (newMessages.length > maxMessagesLength) {
+          newMessages.splice(0, newMessages.length - maxMessagesLength);
+        }
+        return {
+          messages: newMessages,
+        };
+      });
       return;
     });
     return;
