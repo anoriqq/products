@@ -2,17 +2,17 @@
 *.env*
 !*.env.enc
 # TODO 暗号化してignoreから外す
-credentials
+credentials/
 
 # バイナリ
-bin
-!scripts/bin/an
-node_modules
+bin/
+!/scripts/bin/*an
 
 # 成果物
 dist
+node_modules
 
 # rowデータ
-packages/mongodb/db
-packages/nginx/certs
-packages/redis/data
+/packages/mongodb/db/
+/packages/nginx/certs/
+/packages/redis/data/
