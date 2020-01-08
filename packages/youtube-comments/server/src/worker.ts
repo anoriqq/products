@@ -3,6 +3,7 @@ import got from 'got';
 import { get } from 'lodash';
 
 import { createWebSocketServer } from './websocket';
+import { getCommentsCount } from './api/logic';
 import { Video, Comment } from './models';
 
 // Logger
@@ -88,7 +89,8 @@ class WorkerGettingComment extends EventEmitter {
   private createTimer(v: videoObj) {
     return setTimeout(() => this.getComment(v).catch(err => {
       this.clearTimer(v);
-      return log(err);
+      log(err);
+      return;
     }), v.timeoutMs);
   }
 
@@ -121,13 +123,19 @@ class WorkerGettingComment extends EventEmitter {
       this.createTimer(v);
     }
 
-    if (!actions) return log({ message: '新規コメントなし', videoId: v.videoId });
+    if (!actions) {
+      // log({ message: '新規コメントなし', videoId: v.videoId });
+      return;
+    }
     const commentsToSave: comment[] = actions.map((action: any)=>{
       const comment: commentObj = get(action, 'addChatItemAction.item');
-      if(!comment) return/*  log({ message: 'コメント以外のアクション', videoId: v.videoId, action }) */;
+      if (!comment) {
+        // log({ message: 'コメント以外のアクション', videoId: v.videoId, action });
+        return;
+      }
       return this.sortingComment({comment, videoId: v.videoId});
     }).filter((x: any)=>x);
-    log({ message: 'コメント取得', videoId: v.videoId, newCommentsCount: commentsToSave.length });
+    // log({ message: 'コメント取得', videoId: v.videoId, newCommentsCount: commentsToSave.length });
     await Comment.insertMany(commentsToSave, { ordered: false }).catch(err => {
       const regex = /E11000 duplicate key error collection: youtube-comments.comments index: commentId_1 dup key: { commentId: ".*" }/;
       if (!regex.test(err.message)) throw err;

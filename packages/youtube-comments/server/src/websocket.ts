@@ -48,6 +48,12 @@ class CreateWebSocketServer {
     return;
   }
 
+  public endLive({videoId}: {videoId: string}) {
+    this.io.to(`V:${videoId}`).emit('END_LIVE', { videoId });
+    Object.keys(this.io.in(`V:${videoId}`).sockets).forEach(socket => {
+      this.io.in(`V:${videoId}`).sockets[socket].leave(`V:${videoId}`);
+    })
+    log(Object.keys(this.io.in(`V:${videoId}`).sockets));
     return;
   }
 }
