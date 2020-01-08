@@ -24,50 +24,62 @@ export class Comments extends Component<Props, State> {
         lastAddedCommentId: undefined,
         lastAddedCommentTimestampUsec: Number.POSITIVE_INFINITY,
       })),
+      queue: [],
     };
   }
 
+  private async waitToBeAddedToLane({ commentId, timestampUsec }: { commentId: string, timestampUsec: string }) {
+    await this.asyncSetState((state: Readonly<State>) => ({
+      queue: [...state.queue, commentId],
+    }));
+    const lane = await this.setCommentToLane({ commentId, timestampUsec });
+    await this.asyncSetState((state: Readonly<State>) => ({
+      queue: [...state.queue].filter(id=>id!==commentId),
+    }));
+    return lane;
+  }
+
   private async setCommentToLane({ commentId, timestampUsec }: { commentId: string, timestampUsec: string }) {
-    return new Promise<number>(resolve => {
-      const minimumLane: Lane = this.state.lanes.reduce((acc, cur) => {
-        if (Math.min(acc.lastAddedCommentTimestampUsec, cur.lastAddedCommentTimestampUsec) === Number.POSITIVE_INFINITY) {
-          return acc.lane < cur.lane ? acc : cur;
-        }
-        if (Math.max(acc.lastAddedCommentTimestampUsec, cur.lastAddedCommentTimestampUsec) === Number.POSITIVE_INFINITY) {
-          return acc.lastAddedCommentTimestampUsec > cur.lastAddedCommentTimestampUsec ? acc : cur;
-        }
-        return acc.lastAddedCommentTimestampUsec < cur.lastAddedCommentTimestampUsec ? acc : cur;
-      });
-      this.setState(state => ({
-        lanes: state.lanes.map(lane => {
-          if (lane.lane !== minimumLane.lane) return lane;
-          return {
-            ...lane,
-            lastAddedCommentId: commentId,
-            lastAddedCommentTimestampUsec: Number(timestampUsec),
-          };
-        }),
-      }), () => resolve(minimumLane.lane));
+    const minimumLane: Lane = this.state.lanes.reduce((acc, cur) => {
+      if (Math.min(acc.lastAddedCommentTimestampUsec, cur.lastAddedCommentTimestampUsec) === Number.POSITIVE_INFINITY) {
+        return acc.lane < cur.lane ? acc : cur;
+      }
+      if (Math.max(acc.lastAddedCommentTimestampUsec, cur.lastAddedCommentTimestampUsec) === Number.POSITIVE_INFINITY) {
+        return acc.lastAddedCommentTimestampUsec > cur.lastAddedCommentTimestampUsec ? acc : cur;
+      }
+      return acc.lastAddedCommentTimestampUsec < cur.lastAddedCommentTimestampUsec ? acc : cur;
     });
+    const lanes = this.state.lanes.map(lane => {
+      if (lane.lane !== minimumLane.lane) return lane;
+      return {
+        ...lane,
+        lastAddedCommentId: commentId,
+        lastAddedCommentTimestampUsec: Number(timestampUsec),
+      };
+    });
+    await this.asyncSetState({ lanes });
+    return minimumLane.lane;
   }
 
   private deleteCommentFromLane(id: string) {
     if (!this.state.lanes.some(lane => { return lane.lastAddedCommentId === id })) return;
     this.setState(state => ({
       lanes: state.lanes.map(lane => {
-        if (lane.lastAddedCommentId !== id) return lane;
-        return {
-          ...lane,
-          lastAddedCommentId: undefined,
-          lastAddedCommentTimestampUsec: Number.POSITIVE_INFINITY,
-        };
+        if (lane.lastAddedCommentId === id) {
+          return {
+            ...lane,
+            lastAddedCommentId: undefined,
+            lastAddedCommentTimestampUsec: Number.POSITIVE_INFINITY,
+          };
+        }
+        return lane;
       }),
     }));
     return;
   }
 
   private async setWidth({ commentId, width, timestampUsec }: {commentId: string, width: number, timestampUsec: string}) {
-    const lane = await this.setCommentToLane({commentId, timestampUsec});
+    const lane = await this.waitToBeAddedToLane({commentId, timestampUsec});
     this.props.setPosition({ commentId, width, top: (lane * this.state.fontSize)});
     return;
   }
@@ -76,6 +88,10 @@ export class Comments extends Component<Props, State> {
     this.props.setExited(id);
     this.deleteCommentFromLane(id);
     return;
+  }
+
+  private async asyncSetState(newState: any) {
+    return new Promise<void>(resolve => this.setState(newState, resolve));
   }
 
   render() {
@@ -115,6 +131,7 @@ export interface Props {
 export interface State {
   fontSize: number,
   lanes: Lane[],
+  queue: string[],
 }
 
 export interface Lane {
