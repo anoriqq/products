@@ -92,7 +92,6 @@ export class App extends Component<{}, State> {
       (this.state.presetTimeUsec >= Number(message.timestampUsec)) &&
       (this.state.presetTimeUsec <= Number(message.timestampUsec) + (this.state.presetFlameoutUsec * 2))
     ), 'commentId').map(message => {
-      message.isDisplay = false;
       message.isEnd = false;
       return message;
     });
@@ -127,7 +126,6 @@ export interface State {
 }
 
 export interface MessageExtend extends Message {
-  isDisplay?: boolean,
   isEnd?: boolean,
   width?: number,
   top?: number,
