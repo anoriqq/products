@@ -1,59 +1,82 @@
 // Logger
 import debug from 'debug';
-const log = debug('app:comment');
+const log = debug('app:Comment2');
 
 // Packages
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { liveChatClient, App } from '@src/store/liveChatClient';
 import { Transition } from 'react-transition-group';
+import { useIntersection } from 'use-intersection';
 
-export function Comment(props: Props) {
+export function Comment({ message, flameoutMsec, screenWidth }: Props) {
+  const target = useRef<HTMLDivElement>(null);
+  const [isClearLane, setIsClearLane] = useState(0);
+  const intersecting = useIntersection(target, {
+    rootMargin: `0% 0% 0% -90%`,
+  });
+  if (isClearLane === 0 && intersecting) setIsClearLane(1);
+  if (isClearLane === 1 && !intersecting) {
+    setIsClearLane(2);
+    liveChatClient.clearLane({commentId: message.commentId, width: message.width});
+  }
+  const [isUpdatedWidth, updateWidth] = useState<boolean>(false);
   const defaultStyle: React.CSSProperties = {
     whiteSpace: 'nowrap',
-    fontSize: `${props.fontSize}px`,
+    fontSize: `${liveChatClient.state.fontSize}px`,
     position: 'absolute',
-    transform: `translateX(${props.screenWidth}px)`,
-    transition: `transform ${props.presetFlameoutUsec / 1000}ms linear`,
+    transform: `translateX(${screenWidth}px)`,
+    transition: `transform ${flameoutMsec}ms linear`,
   };
-  const [width, setWidth] = useState<number|undefined>(undefined);
   const [transitionStyles, setTransitionStyles] = useState<TransitionStyles>({
-    entering: { transform: `translateX(-${width||0}px)` },
-    entered:  { transform: `translateX(-${width||0}px)` },
-    exiting:  { transform: `translateX(${props.screenWidth}px)` },
-    exited:  { transform: `translateX(${props.screenWidth}px)` },
+    entering: { transform: `translateX(-${message.width||0}px)` },
+    entered:  { transform: `translateX(-${message.width||0}px)` },
+    exiting:  { transform: `translateX(${screenWidth}px)` },
+    exited:  { transform: `translateX(${screenWidth}px)` },
   });
-  const updateWidth = (node: HTMLDivElement | null) => {
-    if (width || props.width || !props.setWidth || !node?.offsetWidth) return
-    setWidth(node.offsetWidth);
-    props.setWidth({ commentId: props.commentId, width: node.offsetWidth, timestampUsec: props.timestampUsec });
+  const setWidth = (instance: HTMLDivElement | null) => {
+    const width = instance?.offsetWidth;
+    if (isUpdatedWidth || message.width !== 0 || !width) return;
+    updateWidth(true);
+    liveChatClient.setWidth({commentId: message.commentId, width});
     setTransitionStyles({
-      entering: { transform: `translateX(-${node.offsetWidth}px)` },
-      entered:  { transform: `translateX(-${node.offsetWidth}px)` },
-      exiting:  { transform: `translateX(${props.screenWidth}px)` },
-      exited:  { transform: `translateX(${props.screenWidth}px)` },
+      entering: { transform: `translateX(-${width}px)` },
+      entered:  { transform: `translateX(-${width}px)` },
+      exiting:  { transform: `translateX(${screenWidth}px)` },
+      exited:  { transform: `translateX(${screenWidth}px)` },
     });
-    return
+    return;
+  }
+  const onEntered = () => {
+    if (message.width === undefined) return;
+    liveChatClient.setExited({ commentId: message.commentId, width: message.width });
   };
 
   return (
     <Transition
-      in={Boolean(props.width) && (props.top !== undefined)}
-      timeout={props.presetFlameoutUsec / 1000}
-      onEntered={()=>props.setExited(props.commentId)}
+      in={message.width !== 0}
+      timeout={flameoutMsec}
+      onEntered={onEntered}
     >
       {state => (
         <div
           style={{
             ...defaultStyle,
-            top: `${props.top}px`,
+            top: `${message.top}px`,
             ...transitionStyles[state],
           }}
-          ref={updateWidth}
+          ref={setWidth}
         >
-          {props.text}
+          <div ref={target}>{message.text}</div>
         </div>
       )}
     </Transition>
   );
+}
+
+interface Props {
+  message: App.DisplayedMessage;
+  flameoutMsec: number;
+  screenWidth: number;
 }
 
 export interface TransitionStyles {
@@ -62,29 +85,4 @@ export interface TransitionStyles {
   exiting?: React.CSSProperties,
   exited?: React.CSSProperties,
   unmounted?: React.CSSProperties,
-}
-
-export interface Props {
-  commentId: string,
-  text: string,
-  fontSize: number,
-  timestampUsec: string,
-
-  /** この位置から遷移開始 */
-  screenWidth: number,
-
-  /** コメント要素のwidth 遷移先を決定するために必要 初期値undefined以外になったときに遷移開始 */
-  width?: number,
-
-  /** コメントの垂直位置 */
-  top?: number,
-
-  /** この時間かけて遷移する */
-  presetFlameoutUsec: number,
-
-  /** コメント要素のwidthを親に伝える */
-  setWidth?: ({ commentId, width, timestampUsec }: {commentId: string, width: number, timestampUsec: string})=>void,
-
-  /** 遷移が完了したら呼び出して該当コメントを削除する */
-  setExited: (id: string) => void,
 }

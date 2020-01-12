@@ -4,6 +4,9 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "removeComments": true,
+    "typeRoots": [
+      "@types",
+    ],
   },
   "exclude": [
     "node_modules",
