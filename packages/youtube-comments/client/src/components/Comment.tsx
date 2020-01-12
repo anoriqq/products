@@ -12,7 +12,7 @@ export function Comment({ message, flameoutMsec, screenWidth }: Props) {
   const target = useRef<HTMLDivElement>(null);
   const [isClearLane, setIsClearLane] = useState(0);
   const intersecting = useIntersection(target, {
-    rootMargin: `0% 0% 0% -90%`,
+    rootMargin: `0% 0% 0% -95%`,
   });
   if (isClearLane === 0 && intersecting) setIsClearLane(1);
   if (isClearLane === 1 && !intersecting) {
