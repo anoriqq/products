@@ -9,14 +9,15 @@ body {
   background-color: rgba(255, 255, 255, 0);
 }
 
-.comments {
+#comment-box {
   position: relative;
   height: 100%;
   width: 100%;
 }
 
-#comment-box {
-  position: relative;
-  height: 100%;
-  width: 100%;
+.comments {
+  color: white;
+  font-family: 'MS ゴシック', sans-serif;
+  -webkit-text-stroke: 1px black;
+  font-weight: bold;
 }

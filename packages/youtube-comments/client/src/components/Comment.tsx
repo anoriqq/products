@@ -66,7 +66,12 @@ export function Comment({ message, flameoutMsec, screenWidth }: Props) {
           }}
           ref={setWidth}
         >
-          <div ref={target}>{message.text}</div>
+          <div
+            className='comments'
+            ref={target}
+          >
+            {message.text}
+          </div>
         </div>
       )}
     </Transition>
