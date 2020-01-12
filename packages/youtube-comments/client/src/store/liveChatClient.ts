@@ -5,7 +5,7 @@ const log = debug('app:LiveChatClient')
 // Packages
 import ky from 'ky';
 import io from 'socket.io-client';
-import { uniqBy, sortBy, isEqual, dropWhile, sortedUniqBy } from 'lodash';
+import { uniqBy, sortBy, isEqual, dropWhile, sortedUniqBy, compact } from 'lodash';
 
 class LiveChatClient implements App.LiveChatClient.Interface{
   state: App.LiveChatClient.State;
@@ -21,7 +21,7 @@ class LiveChatClient implements App.LiveChatClient.Interface{
       maxMessagesLength: 500,
       presetUsec: 15 * 1000 * 1000,
       flameoutUsec: 5 * 1000 * 1000,
-      ticker: setInterval(this.tick(), 500),
+      ticker: setInterval(this.tick(), 50),
       fontSize: 64,
       lanes: [...Array<App.LiveChatClient.Lane>(numberOfLanes)].map((lane: App.LiveChatClient.Lane, i: number) => ({
         lane: i,
@@ -29,6 +29,7 @@ class LiveChatClient implements App.LiveChatClient.Interface{
         sumOfWidth: 0,
       })),
       isEndQueue: [],
+      clearLaneQueue: [],
     };
     this.connect(true);
   }
@@ -43,7 +44,7 @@ class LiveChatClient implements App.LiveChatClient.Interface{
 
       const initializedMessages = mergedMessages.filter(m => {
         if (!this.state.isEndQueue.includes(m.commentId)) return true;
-        dropWhile(this.state.isEndQueue, id=>{return id===m.commentId})
+        dropWhile(this.state.isEndQueue, id => { return id === m.commentId });
         return false;
       }).map(m => {
         const width = m.width === undefined ? 0 : m.width;
@@ -59,7 +60,27 @@ class LiveChatClient implements App.LiveChatClient.Interface{
         presetTimeUsec >= Number(m.timestampUsec || 0) // コメントの時間が実時間より大きくなったら
       ));
 
-      if(isEqual(_displayedMessages, messages)) return;
+      if (isEqual(_displayedMessages, messages)) return;
+
+      if (this.state.clearLaneQueue.length) {
+        this.state.clearLaneQueue = compact(this.state.clearLaneQueue.map(q => {
+          /** クリア対象のcommentIdが含まれるLane */
+          const lane = this.state.lanes.filter(({ commentIds }) => commentIds.includes(q.commentId));
+          if (!lane.length) return q;
+
+          this.state.lanes = this.state.lanes.map(l => {
+            if (!l.commentIds.includes(q.commentId)) return l;
+            const sumOfWidth = (l.sumOfWidth - q.width) < 0 ? 0 : l.sumOfWidth - q.width;
+            return {
+              ...l,
+              commentIds: sumOfWidth ? dropWhile(l.commentIds, id => id === q.commentId) : [],
+              sumOfWidth,
+            };
+          });
+          return;
+        }));
+      }
+
       this.state.displayedMessages = messages;
       this.state.messageUpdateHandler({ messages });
       return;
@@ -166,14 +187,7 @@ class LiveChatClient implements App.LiveChatClient.Interface{
   }
 
   public clearLane({ commentId, width }: App.LiveChatClient.SetWidthArgs) {
-    this.state.lanes = this.state.lanes.map(lane => {
-      if (!lane.commentIds.includes(commentId)) return lane;
-      return {
-        ...lane,
-        commentIds: dropWhile(lane.commentIds, id=>{return id===commentId}),
-        sumOfWidth: lane.sumOfWidth - width,
-      };
-    });
+    this.state.clearLaneQueue.push({commentId, width});
     return;
   }
 
@@ -208,7 +222,8 @@ export namespace App {
       ticker: number;
       fontSize: number;
       lanes: Lane[];
-      isEndQueue: string[]
+      isEndQueue: string[];
+      clearLaneQueue: {commentId: string, width: number}[];
     }
 
     export interface ListenHandlerArgs {
