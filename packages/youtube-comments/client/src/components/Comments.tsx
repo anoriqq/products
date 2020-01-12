@@ -21,25 +21,29 @@ export class Comments extends Component<Props, State> {
       fontSize,
       lanes: [...Array<Lane>(numberOfLanes)].map((lane: Lane, i: number) => ({
         lane: i,
-        lastAddedCommentId: undefined,
+        commentIds: [],
         lastAddedCommentTimestampUsec: Number.POSITIVE_INFINITY,
+        sumOfWidth: 0,
       })),
-      queue: [],
+      enterQueue: [],
+      exitQueue: [],
     };
   }
 
-  private async waitToBeAddedToLane({ commentId, timestampUsec }: { commentId: string, timestampUsec: string }) {
+  /** レーンを返す関数 */
+  private async waitToBeAddedToLane({ commentId, width, timestampUsec }: { commentId: string, width: number, timestampUsec: string }) {
     await this.asyncSetState((state: Readonly<State>) => ({
-      queue: [...state.queue, commentId],
+      enterQueue: [...state.enterQueue, commentId],
     }));
-    const lane = await this.setCommentToLane({ commentId, timestampUsec });
+    const lane = await this.setCommentToLane({ commentId, width, timestampUsec });
     await this.asyncSetState((state: Readonly<State>) => ({
-      queue: [...state.queue].filter(id=>id!==commentId),
+      enterQueue: [...state.enterQueue].filter(id=>id!==commentId),
     }));
+    if(this.state.enterQueue.length)log(this.state.enterQueue);
     return lane;
   }
 
-  private async setCommentToLane({ commentId, timestampUsec }: { commentId: string, timestampUsec: string }) {
+  private async setCommentToLane({ commentId, width, timestampUsec }: { commentId: string, width: number, timestampUsec: string }) {
     const minimumLane: Lane = this.state.lanes.reduce((acc, cur) => {
       if (Math.min(acc.lastAddedCommentTimestampUsec, cur.lastAddedCommentTimestampUsec) === Number.POSITIVE_INFINITY) {
         return acc.lane < cur.lane ? acc : cur;
@@ -53,40 +57,47 @@ export class Comments extends Component<Props, State> {
       if (lane.lane !== minimumLane.lane) return lane;
       return {
         ...lane,
-        lastAddedCommentId: commentId,
+        commentIds: [...lane.commentIds, commentId],
         lastAddedCommentTimestampUsec: Number(timestampUsec),
+        sumOfWidth: lane.sumOfWidth + width,
       };
     });
     await this.asyncSetState({ lanes });
     return minimumLane.lane;
   }
 
-  private deleteCommentFromLane(id: string) {
-    if (!this.state.lanes.some(lane => { return lane.lastAddedCommentId === id })) return;
-    this.setState(state => ({
+  private async deleteCommentFromLane({ commentId, width }: { commentId: string, width: number }) {
+    await this.asyncSetState((state: Readonly<State>) => ({
+      exitQueue: [...state.exitQueue, commentId],
+    }));
+    await this.asyncSetState((state: Readonly<State>) => ({
       lanes: state.lanes.map(lane => {
-        if (lane.lastAddedCommentId === id) {
+        if (lane.commentIds.includes(commentId)) {
           return {
             ...lane,
-            lastAddedCommentId: undefined,
+            commentIds: lane.commentIds.splice(lane.commentIds.findIndex(id=>id===commentId), 1),
             lastAddedCommentTimestampUsec: Number.POSITIVE_INFINITY,
+            sumOfWidth: lane.sumOfWidth - width,
           };
         }
         return lane;
       }),
     }));
+    await this.asyncSetState((state: Readonly<State>) => ({
+      exitQueue: [...state.exitQueue].filter(id=>id!==commentId),
+    }));
     return;
   }
 
   private async setWidth({ commentId, width, timestampUsec }: {commentId: string, width: number, timestampUsec: string}) {
-    const lane = await this.waitToBeAddedToLane({commentId, timestampUsec});
+    const lane = await this.waitToBeAddedToLane({commentId, width, timestampUsec});
     this.props.setPosition({ commentId, width, top: (lane * this.state.fontSize)});
     return;
   }
 
-  private setExited(id: string) {
-    this.props.setExited(id);
-    this.deleteCommentFromLane(id);
+  private async setExited({ commentId, width }: {commentId: string, width: number}) {
+    this.props.setExited(commentId);
+    await this.deleteCommentFromLane({ commentId, width });
     return;
   }
 
@@ -131,11 +142,13 @@ export interface Props {
 export interface State {
   fontSize: number,
   lanes: Lane[],
-  queue: string[],
+  enterQueue: string[],
+  exitQueue: string[],
 }
 
 export interface Lane {
   lane: number,
-  lastAddedCommentId?: string,
+  commentIds: string[],
   lastAddedCommentTimestampUsec: number,
+  sumOfWidth: number,
 }

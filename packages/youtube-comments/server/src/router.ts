@@ -5,8 +5,8 @@ const router = Router();
 
 router.use('/api', api);
 
-router.get('/', (req, res, next) => {
-  return res.render('index', {title: 'Hello World!'});
+router.get('/*', (req, res, next) => {
+  return res.render('index', {title: 'YouTube Comments'});
 });
 
 export { router };

@@ -22,7 +22,7 @@ export function Comment(props: Props) {
     exited:  { transform: `translateX(${props.screenWidth}px)` },
   });
   const updateWidth = (node: HTMLDivElement | null) => {
-    if (width || props.width || !props.setWidth || !node?.offsetWidth) return
+    if (width || props.width || !props.setWidth || !node?.offsetWidth) return;
     setWidth(node.offsetWidth);
     props.setWidth({ commentId: props.commentId, width: node.offsetWidth, timestampUsec: props.timestampUsec });
     setTransitionStyles({
@@ -31,14 +31,14 @@ export function Comment(props: Props) {
       exiting:  { transform: `translateX(${props.screenWidth}px)` },
       exited:  { transform: `translateX(${props.screenWidth}px)` },
     });
-    return
+    return;
   };
 
   return (
     <Transition
       in={Boolean(props.width) && (props.top !== undefined)}
       timeout={props.presetFlameoutUsec / 1000}
-      onEntered={()=>props.setExited(props.commentId)}
+      onEntered={() => { log(`onEntered: ${props.text}`);if(width !== undefined)props.setExited({ commentId: props.commentId, width })}}
     >
       {state => (
         <div
@@ -86,5 +86,5 @@ export interface Props {
   setWidth?: ({ commentId, width, timestampUsec }: {commentId: string, width: number, timestampUsec: string})=>void,
 
   /** 遷移が完了したら呼び出して該当コメントを削除する */
-  setExited: (id: string) => void,
+  setExited: ({ commentId, width }: {commentId: string, width: number}) => void,
 }

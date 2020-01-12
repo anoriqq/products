@@ -89,8 +89,8 @@ export class App extends Component<{}, State> {
   private filterMessages() {
     return uniqBy(this.state.messages.filter(message =>
       (!message.isEnd) &&
-      (this.state.presetTimeUsec >= Number(message.timestampUsec)) &&
-      (this.state.presetTimeUsec <= Number(message.timestampUsec) + (this.state.presetFlameoutUsec * 2))
+      (this.state.presetTimeUsec >= Number(message.timestampUsec))/*  &&
+      (this.state.presetTimeUsec <= Number(message.timestampUsec) + (this.state.presetFlameoutUsec * 3)) */
     ), 'commentId').map(message => {
       message.isEnd = false;
       return message;

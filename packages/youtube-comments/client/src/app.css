@@ -9,12 +9,13 @@ body {
   background-color: rgba(255, 255, 255, 0);
 }
 
-.control {
-  position: absolute;
-  bottom: 0;
+.comments {
+  position: relative;
+  height: 100%;
+  width: 100%;
 }
 
-.comments {
+#comment-box {
   position: relative;
   height: 100%;
   width: 100%;

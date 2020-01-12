@@ -34,7 +34,7 @@ class CreateWebSocketServer {
         oldRoom.forEach(room => socket.leave(room));
         socket.join(`V:${videoId}`, async () => {
           const docs = await getFirstComments(videoId);
-          this.sendComment({videoId, comments: docs});
+          this.sendComment({videoId, messages: docs});
         });
       });
     });
@@ -42,9 +42,9 @@ class CreateWebSocketServer {
     return;
   }
 
-  public sendComment(data: {videoId?: string, socketId?: string, comments: any}) {
-    if(data.socketId) return this.io.to(data.socketId).emit('COMMENT_UPDATE', data);
-    if(data.videoId) return this.io.to(`V:${data.videoId}`).emit('COMMENT_UPDATE', data);
+  public sendComment(data: {videoId?: string, socketId?: string, messages: any}) {
+    if(data.socketId) return this.io.to(data.socketId).emit('MESSAGE_UPDATE', data);
+    if(data.videoId) return this.io.to(`V:${data.videoId}`).emit('MESSAGE_UPDATE', data);
     return;
   }
 

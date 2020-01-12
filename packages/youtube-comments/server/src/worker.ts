@@ -88,22 +88,26 @@ class WorkerGettingComment extends EventEmitter {
 
   private createTimer(v: videoObj) {
     return setTimeout(() => this.getComment(v).catch(err => {
-      this.clearTimer(v);
+      this.clearTimer(v, err);
       log(err);
       return;
     }), v.timeoutMs);
   }
 
-  private async clearTimer(v: videoObj) {
+  private async clearTimer(v: videoObj, err?: any) {
     if (v.timer) clearTimeout(v.timer);
     if (v.continuation) v.continuation = '';
-    await Video.findOneAndUpdate({ videoId: v.videoId }, { $set: { isLive: false } });
     this.videos.splice(this.videos.findIndex(video => { return video.videoId === v.videoId }), 1);
+    if (!err) this.endStreaming(v);
+    return;
+  }
+
+  private async endStreaming(v: videoObj) {
+    await Video.findOneAndUpdate({ videoId: v.videoId }, { $set: { isLive: false } });
     createWebSocketServer.endLive({videoId: v.videoId});
     const commentsCount = await getCommentsCount(v.videoId);
     log({ message: 'ライブ配信終了', videoId: v.videoId, commentsCount });
     log({ videos: this.videos.map(v => { return v.videoId }) });
-    return;
   }
 
   private async getComment(v: videoObj) {
@@ -140,7 +144,7 @@ class WorkerGettingComment extends EventEmitter {
       const regex = /E11000 duplicate key error collection: youtube-comments.comments index: commentId_1 dup key: { commentId: ".*" }/;
       if (!regex.test(err.message)) throw err;
     });
-    createWebSocketServer.sendComment({videoId: v.videoId, comments: commentsToSave});
+    createWebSocketServer.sendComment({videoId: v.videoId, messages: commentsToSave});
     return;
   }
 

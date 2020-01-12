@@ -19,8 +19,8 @@ class SocketClient {
   }
 
   public setCommentUpdateHandler(handler: (data: {videoId: string, comments: any}) => void) {
-    this.socket.off('COMMENT_UPDATE');
-    this.socket.on('COMMENT_UPDATE', handler);
+    this.socket.off('MESSAGE_UPDATE');
+    this.socket.on('MESSAGE_UPDATE', handler);
   }
 
   public setEndLiveHandler(handler: (data: {videoId: string}) => void) {
