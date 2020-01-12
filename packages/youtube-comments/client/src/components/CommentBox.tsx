@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 
 // Modules
 import { liveChatClient, App } from '@src/store/liveChatClient';
-import { Comment } from '@src/components/Comment2';
+import { Comment } from '@src/components/Comment';
 
 export class CommentBox extends Component<Props, State>{
   constructor(props: Props) {
