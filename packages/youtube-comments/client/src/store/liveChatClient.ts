@@ -7,7 +7,7 @@ import ky from 'ky';
 import io from 'socket.io-client';
 import { uniqBy, sortBy, isEqual, dropWhile, sortedUniqBy, compact } from 'lodash';
 
-class LiveChatClient implements App.LiveChatClient.Interface{
+class LiveChatClient implements App.LiveChatClient.Interface {
   state: App.LiveChatClient.State;
   constructor() {
     const fontSize = 64;
@@ -19,8 +19,8 @@ class LiveChatClient implements App.LiveChatClient.Interface{
       displayedMessages: [],
       messageUpdateHandler: () => { },
       maxMessagesLength: 500,
-      presetUsec: 15 * 1000 * 1000,
-      flameoutUsec: 5 * 1000 * 1000,
+      presetUsec: 10 * 1000 * 1000,
+      flameoutUsec: 6 * 1000 * 1000,
       ticker: setInterval(this.tick(), 50),
       fontSize: 64,
       lanes: [...Array<App.LiveChatClient.Lane>(numberOfLanes)].map((lane: App.LiveChatClient.Lane, i: number) => ({
