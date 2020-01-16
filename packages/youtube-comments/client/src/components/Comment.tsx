@@ -23,6 +23,7 @@ export function Comment({ message, flameoutMsec, screenWidth }: Props) {
   const defaultStyle: React.CSSProperties = {
     whiteSpace: 'nowrap',
     fontSize: `${liveChatClient.state.fontSize}px`,
+    fontFamily: liveChatClient.state.fontFamily,
     position: 'absolute',
     transform: `translateX(${screenWidth}px)`,
     transition: `transform ${flameoutMsec}ms linear`,

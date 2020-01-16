@@ -7,6 +7,8 @@ import ky from 'ky';
 import io from 'socket.io-client';
 import { uniqBy, sortBy, isEqual, dropWhile, sortedUniqBy, compact } from 'lodash';
 
+const DEFAULT_FONT_FAMILY = 'MS ゴシック sans-serif';
+
 class LiveChatClient implements App.LiveChatClient.Interface {
   state: App.LiveChatClient.State;
   constructor() {
@@ -30,6 +32,7 @@ class LiveChatClient implements App.LiveChatClient.Interface {
       })),
       isEndQueue: [],
       clearLaneQueue: [],
+      fontFamily: DEFAULT_FONT_FAMILY,
     };
     this.connect(true);
   }
@@ -88,7 +91,7 @@ class LiveChatClient implements App.LiveChatClient.Interface {
   }
 
   /** 新しいvideoIdを指定してコメントの取得を開始する */
-  public async listen({videoId, presetUsec, flameoutUsec}: App.LiveChatClient.ListenHandlerArgs) {
+  public async listen({videoId, presetUsec, flameoutUsec, fontFamily}: App.LiveChatClient.ListenHandlerArgs) {
     log(`listen: ${videoId}`);
     if (this.state.videoId === videoId) return;
     this.state.videoId = videoId;
@@ -99,6 +102,7 @@ class LiveChatClient implements App.LiveChatClient.Interface {
     log('Start getting comments.');
     if (presetUsec) this.state.presetUsec = presetUsec;
     if (flameoutUsec) this.state.flameoutUsec = flameoutUsec;
+    if (fontFamily) this.state.fontFamily = `${fontFamily}, ${DEFAULT_FONT_FAMILY}`;
     this.connect();
     this.getComment({videoId});
     return;
@@ -223,13 +227,15 @@ export namespace App {
       fontSize: number;
       lanes: Lane[];
       isEndQueue: string[];
-      clearLaneQueue: {commentId: string, width: number}[];
+      clearLaneQueue: { commentId: string, width: number }[];
+      fontFamily: string;
     }
 
     export interface ListenHandlerArgs {
       videoId: string;
       presetUsec?: number;
       flameoutUsec?: number;
+      fontFamily?: string;
     }
 
     export interface MessageUpdateHandler {

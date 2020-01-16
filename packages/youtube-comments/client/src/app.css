@@ -17,7 +17,6 @@ body {
 
 .comments {
   color: white;
-  font-family: 'MS ゴシック sans-serif';
   -webkit-text-stroke: 2px black;
   font-weight: bold;
 }
