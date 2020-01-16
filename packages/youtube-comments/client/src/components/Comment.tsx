@@ -12,7 +12,7 @@ export function Comment({ message, flameoutMsec, screenWidth }: Props) {
   const target = useRef<HTMLDivElement>(null);
   const [isClearLane, setIsClearLane] = useState(0);
   const intersecting = useIntersection(target, {
-    rootMargin: `0% 0% 0% -95%`,
+    rootMargin: `0% 0% 0% -99%`,
   });
   if (isClearLane === 0 && intersecting) setIsClearLane(1);
   if (isClearLane === 1 && !intersecting) {
@@ -23,6 +23,7 @@ export function Comment({ message, flameoutMsec, screenWidth }: Props) {
   const defaultStyle: React.CSSProperties = {
     whiteSpace: 'nowrap',
     fontSize: `${liveChatClient.state.fontSize}px`,
+    fontFamily: liveChatClient.state.fontFamily,
     position: 'absolute',
     transform: `translateX(${screenWidth}px)`,
     transition: `transform ${flameoutMsec}ms linear`,
@@ -66,7 +67,12 @@ export function Comment({ message, flameoutMsec, screenWidth }: Props) {
           }}
           ref={setWidth}
         >
-          <div ref={target}>{message.text}</div>
+          <div
+            className='comments'
+            ref={target}
+          >
+            {message.text}
+          </div>
         </div>
       )}
     </Transition>

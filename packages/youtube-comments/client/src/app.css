@@ -9,14 +9,14 @@ body {
   background-color: rgba(255, 255, 255, 0);
 }
 
-.comments {
+#comment-box {
   position: relative;
   height: 100%;
   width: 100%;
 }
 
-#comment-box {
-  position: relative;
-  height: 100%;
-  width: 100%;
+.comments {
+  color: white;
+  -webkit-text-stroke: 2px black;
+  font-weight: bold;
 }
