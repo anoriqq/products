@@ -69,8 +69,8 @@ services:
       - '6379'
     networks:
       product_network:
-    env_file:
-      - $PRODUCT_DIR/packages/redis/.env
+    # env_file:
+    #   - $PRODUCT_DIR/packages/redis/.env
 
   mongodb:
     container_name: mongodb
@@ -88,8 +88,8 @@ services:
       - '27017:27017' # For debug
     networks:
       product_network:
-    env_file:
-      - $PRODUCT_DIR/packages/mongodb/.env
+    # env_file:
+    #   - $PRODUCT_DIR/packages/mongodb/.env
 
   mongodb-runner:
     container_name: mongodb-runner
@@ -103,8 +103,8 @@ services:
     hostname: mongodb-runner
     networks:
       product_network:
-    env_file:
-      - $PRODUCT_DIR/packages/mongodb/.env
+    # env_file:
+    #   - $PRODUCT_DIR/packages/mongodb/.env
     command: mongo --host mongodb --port 27017  --authenticationDatabase "admin" -u "admin-user" -p "admin-password" /createMongodbUser.js
 
   portfolio:
