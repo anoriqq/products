@@ -24,6 +24,9 @@ function _an(){
           'up'|'restart')
             services
             ;;
+          'encrypt'|'decrypt')
+            services
+            ;;
           *)
             return
             ;;
