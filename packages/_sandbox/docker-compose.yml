@@ -10,7 +10,7 @@ services:
     volumes:
       - type: bind
         source: $PRODUCT_DIR
-        target: /home/sandbox/product
+        target: /home/sandbox/products
     ports:
       - '8000'
       - '8010'
