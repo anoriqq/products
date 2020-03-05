@@ -83,18 +83,26 @@ function _direnv_(){
 function _mkcert_(){
   local TASK_NAME='Create a certificate with mkcert'
   log "Start" "${TASK_NAME}"
-  _sandbox_ $PRODUCT_DIR/packages/_sandbox/scripts/create-cert.sh
-  load docker build -q --rm -t anoriqq/sandbox:latest $PRODUCT_DIR/packages/_sandbox
+
+  # sandboxコンテナでcreate-cert.shを実行する(成果物がワークスペースに保存される)
+  local CREATE_CERT_SCRIPT_RELATIVEPATH=scripts/create-cert.sh
+  chmod 755 $CREATE_CERT_SCRIPT_RELATIVEPATH
   if [ $? -ne 0 ]; then exit 1; fi
-  log "Finish" "Build sandbox docker image"
-  cleanDockerImage
-  docker run --rm \
-    -v $PRODUCT_DIR:/home/sandbox/workspace \
-    -v /c/Users/shota/AppData/Local/mkcert:/home/sandbox/.local/share/mkcert \
-    anoriqq/sandbox \
-    ./sandbox/scripts/create-cert.sh
+  _sandbox_ $CREATE_CERT_SCRIPT_RELATIVEPATH
   if [ $? -ne 0 ]; then exit 1; fi
   log "Finish" "Create certificate"
+
+  # RootCAをWindowsにコピーする
+  local WORKSPACE_CA_DIR=$PRODUCT_DIR/packages/nginx/ca/
+  local WIN_CA_DIR=/mnt/c/Users/shota/AppData/Local/mkcert/
+  sudo rsync -av $WORKSPACE_CA_DIR $WIN_CA_DIR
+  if [ $? -ne 0 ]; then exit 1; fi
+  log "Finish" "Copy rootCA to Windows"
+
+  # @see https://docs.microsoft.com/ja-jp/dotnet/framework/tools/certmgr-exe-certificate-manager-tool
+  log "Message" '証明書の発行が完了したら､ROOT CAファイルをWinodwsのシステムに"ユーザー証明書の管理"から手動でインポートする'
+  echo "certmgr" | cmd.exe
+
   log "Complete" "${TASK_NAME}"
 }
 
@@ -164,17 +172,17 @@ function _e_(){
 function _sandbox_(){
   local TASK_NAME="Execute command in sandbox container"
   log "Start" "${TASK_NAME}"
-  # load docker-compose -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml build
-  # if [ $? -ne 0 ]; then exit 1; fi
-  # log "Finish" "docker-compose build"
+
   if [ "${*:1}" = "" ]; then
     docker-compose  -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm --service-ports sandbox bash
+    if [ $? -ne 0 ]; then exit 1; fi
   else
     log "Run" "${*:1} in sandbox"
     docker-compose -f $PRODUCT_DIR/packages/_sandbox/docker-compose.yml run --rm --service-ports sandbox /bin/bash -c '$0' "${*:1}"
+    if [ $? -ne 0 ]; then exit 1; fi
   fi
-  # if [ $? -ne 0 ]; then exit 1; fi
-  # log "Complete" "${TASK_NAME}"
+
+  log "Complete" "${TASK_NAME}"
 }
 
 # sandboxでコマンドを実行する
