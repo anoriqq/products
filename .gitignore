@@ -15,4 +15,5 @@ node_modules
 # rowデータ
 /packages/mongodb/db/
 /packages/nginx/certs/
+/packages/nginx/ca/
 /packages/redis/data/
