@@ -22,5 +22,5 @@ services:
       - '8070'
       - '8080'
       - '8090'
-    env_file:
-      - $PRODUCT_DIR/packages/_sandbox/.env
+    # env_file:
+    #   - $PRODUCT_DIR/packages/_sandbox/.env
