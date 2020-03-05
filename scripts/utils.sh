@@ -14,6 +14,7 @@ function log(){
       "Skip"     ) EMOJI_CODE="\U1F4DD" ;;
       "Complete" ) EMOJI_CODE="\U1F389" ;;
       "Error"    ) EMOJI_CODE="\U1F525" ;;
+      *          ) EMOJI_CODE="\U1F4E7" ;;
     esac
   fi
   local EMOJI=$(echo -e "${EMOJI_CODE}")
