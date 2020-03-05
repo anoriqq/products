@@ -10,7 +10,7 @@ services:
     volumes:
       - type: bind
         source: $PRODUCT_DIR
-        target: /home/sandbox/product
+        target: /home/sandbox/products
     ports:
       - '8000'
       - '8010'
@@ -22,5 +22,5 @@ services:
       - '8070'
       - '8080'
       - '8090'
-    env_file:
-      - $PRODUCT_DIR/packages/_sandbox/.env
+    # env_file:
+    #   - $PRODUCT_DIR/packages/_sandbox/.env

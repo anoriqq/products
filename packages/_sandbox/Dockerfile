@@ -37,8 +37,8 @@ RUN npm -v
 RUN yarn -v
 
 # set environment variable
-ENV PATH $PATH:/home/sandbox/product/scripts/bin
-ENV PRODUCT_DIR /home/sandbox/product
+ENV PATH $PATH:/home/sandbox/products/scripts/bin
+ENV PRODUCT_DIR /home/sandbox/products
 
 USER sandbox
 WORKDIR $PRODUCT_DIR
