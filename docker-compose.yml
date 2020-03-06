@@ -111,15 +111,20 @@ services:
     container_name: portfolio
     build:
       context: $PRODUCT_DIR/packages/portfolio
+      dockerfile: dev.Dockerfile
     depends_on:
       - nginx
     init: true
     tty: true
     restart: always
+    volumes:
+      - type: bind
+        source: $PRODUCT_DIR/packages/portfolio
+        target: /usr/src/app
     domainname: portfolio
     hostname: portfolio
     expose:
-      - '8000'
+      - '3000'
     networks:
       product_network:
         aliases:
