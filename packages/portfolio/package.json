@@ -1,13 +1,24 @@
 {
   "name": "portfolio",
   "version": "1.0.0",
-  "private": true,
+  "description": "My portfolio site",
   "main": "index.js",
+  "author": "anoriqq",
   "license": "MIT",
+  "private": true,
   "scripts": {
-    "start": "node index.js"
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "next": "^9.2.2",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.7",
+    "@types/react": "^16.9.23",
+    "typescript": "^3.8.3"
   }
 }
