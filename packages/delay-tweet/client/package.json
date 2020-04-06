@@ -19,7 +19,7 @@
     "@mdi/font": "4.9.95",
     "@types/jest": "24.9.1",
     "@types/webpack": "4.41.10",
-    "css-loader": "3.4.2",
+    "css-loader": "3.5.0",
     "deepmerge": "4.2.2",
     "fibers": "4.0.2",
     "prettier": "1.19.1",
