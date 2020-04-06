@@ -74,7 +74,7 @@ services:
 
   mongodb:
     container_name: mongodb
-    image: mongo:4.2.1-bionic
+    image: mongo:4.2.5-bionic
     tty: true
     restart: always
     volumes:
@@ -93,7 +93,7 @@ services:
 
   mongodb-runner:
     container_name: mongodb-runner
-    image: mongo:4.2.1-bionic
+    image: mongo:4.2.5-bionic
     depends_on:
       - mongodb
     tty: true
