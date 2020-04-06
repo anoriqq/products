@@ -1,5 +1,5 @@
 # develop docker-compose.yml でボリュームマウントとenv設定する用
-FROM node:12.13.0-alpine
+FROM node:12.16.1-alpine
 
 ENV PRODUCT_DIR /usr/src/app
 WORKDIR $PRODUCT_DIR
