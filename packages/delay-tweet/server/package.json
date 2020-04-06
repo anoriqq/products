@@ -34,7 +34,7 @@
     "@types/mongoose": "5.5.32",
     "@types/morgan": "1.7.37",
     "@types/node": "12.12.14",
-    "@types/passport": "1.0.2",
+    "@types/passport": "1.0.3",
     "@types/passport-twitter": "1.0.34",
     "@types/webpack": "4.41.0",
     "nodemon": "1.19.4",
