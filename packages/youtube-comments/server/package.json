@@ -27,7 +27,7 @@
     "@types/helmet": "0.0.45",
     "@types/ioredis": "4.14.9",
     "@types/lodash": "4.14.149",
-    "@types/mongoose": "5.7.9",
+    "@types/mongoose": "5.7.10",
     "@types/morgan": "1.9.0",
     "@types/node": "13.11.1",
     "@types/socket.io": "2.1.4",
