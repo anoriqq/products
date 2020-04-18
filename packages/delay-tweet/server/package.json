@@ -36,7 +36,7 @@
     "@types/node": "12.12.36",
     "@types/passport": "1.0.3",
     "@types/passport-twitter": "1.0.34",
-    "@types/webpack": "4.41.11",
+    "@types/webpack": "4.41.12",
     "nodemon": "2.0.3",
     "prettier": "2.0.4",
     "ts-loader": "7.0.0",
