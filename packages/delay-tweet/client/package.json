@@ -13,7 +13,7 @@
     "pug": "2.0.4",
     "vue": "2.6.11",
     "vue-property-decorator": "8.4.2",
-    "vuetify": "2.2.25"
+    "vuetify": "2.2.26"
   },
   "devDependencies": {
     "@mdi/font": "5.1.45",
