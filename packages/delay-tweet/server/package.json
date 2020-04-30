@@ -17,7 +17,7 @@
     "got": "11.0.3",
     "helmet": "3.22.0",
     "mongodb": "3.5.7",
-    "mongoose": "5.9.10",
+    "mongoose": "5.9.11",
     "morgan": "1.10.0",
     "oauth-1.0a": "2.2.6",
     "passport": "0.4.1",
